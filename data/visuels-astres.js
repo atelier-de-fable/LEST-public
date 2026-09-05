@@ -1,0 +1,1 @@
+window.LEST=window.LEST||{},LEST.VISUELS_ASTRES={estran:{couleur:"#787a61",texture:"assets/astres/estran-basalte.png"},ecueil:{couleur:"#a9502c"},basse:{couleur:"#8b8073"},sillage:{couleur:"#9299a0"},ressac:{couleur:"#c28a54"},etale:{couleur:"#9987b0"},balise:{couleur:"#a2b5c6"},havre:{couleur:"#abc8d4"},cardinal:{couleur:"#928c83"}};
