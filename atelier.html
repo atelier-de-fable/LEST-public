@@ -3,10 +3,17 @@
 <title>LEST — Atelier et suivi</title><link rel="stylesheet" href="outils/atlas/atlas.css"><link rel="stylesheet" href="outils/suivi/suivi.css"></head>
 <body><header><a class="marque" href="index.html">LEST <span>/ ATELIER</span></a><a href="atlas.html">Atlas et chantiers ↗</a><a href="modeles.html">Modèles 3D ↗</a><a href="ludion.html">Ludion ↗</a><a href="galerie.html">Galerie ↗</a><a href="studio-son.html">Studio sonore ↗</a></header>
 <main><div class="introduction"><div><p class="surtitre">CARNET DE FABRICATION / 07 SEPTEMBRE 2026</p><h1>Ce qui tient debout.<br>Ce qui reste à construire.</h1><p>Le suivi du jeu, des images et des prochaines propositions.</p></div></div>
+<section id="prochaines-etapes" aria-labelledby="titre-priorite" class="priorites">
+<p class="surtitre">POUR CHOISIR LA SUITE · PROPOSITION À DISCUTER</p><h2 id="titre-priorite">D’abord, une arrivée qui mène à une première extraction.</h2>
+<p>Relier arrivée, rapport d’officier, exploration, construction et conséquence sur les ressources. Cet ordre est proposé : il ne constitue pas une décision de conception validée.</p>
+<p>Les animations, voix et nouveaux décors restent dans le suivi. La proposition est de valider ce premier parcours avant de les multiplier.</p>
+<div id="priorites-liste"></div>
+</section>
+<section id="inventaire" aria-labelledby="titre-inventaire"><h2 id="titre-inventaire">L’inventaire complet</h2>
 <div id="bilan" aria-label="Bilan des états"></div>
-<p class="precision">Une réalisation dans l’atelier n’est pas forcément intégrée au jeu. Les états sont documentés ; les filtres ne modifient pas l’avancement.</p>
-<div class="filtres"><label>Rechercher<input id="recherche" type="search" placeholder="Planète, voix, Ludion…"></label><label>État<select id="etat"><option value="">Tous</option><option value="fait">Fait</option><option value="partiel">Partiel</option><option value="a-faire">À faire</option></select></label><label>Dossier<select id="dossier"><option value="">Tous</option></select></label><button id="reinitialiser">Tout afficher</button></div>
-<p id="resultats" role="status"></p><div id="liste-suivi"></div>
+<p class="precision">Une réalisation dans l’atelier n’est pas forcément intégrée au jeu. Les états sont documentés ; les filtres ne modifient pas l’avancement. « Partiel » signale du travail commencé, pas forcément en cours aujourd’hui. Les idées en réserve ne sont pas des engagements et ne comptent pas dans les travaux restants.</p>
+<button id="voir-restant" class="raccourci">Voir les travaux restants</button><div class="filtres"><label>Rechercher<input id="recherche" type="search" placeholder="Planète, voix, Ludion…"></label><label>État<select id="etat"><option value="">Tous</option><option value="restant">Travaux restants</option><option value="reserve">En réserve</option><option value="fait">Fait</option><option value="partiel">Partiel</option><option value="a-faire">À faire</option></select></label><label>Dossier<select id="dossier"><option value="">Tous</option></select></label><button id="reinitialiser">Tout afficher</button></div>
+<p id="resultats" role="status"></p><div id="liste-suivi"></div><details id="reserve"><summary>Idées en réserve <span id="nombre-reserve"></span></summary><p>Références et pistes mises de côté. Une décision explicite est nécessaire pour en faire un travail engagé.</p><div id="liste-reserve"></div></details></section>
 <section id="rapport-animations" class="rapport"><p class="surtitre">ÉTUDE / DÉCORS, PERSONNAGES ET SON</p><h2>Animer un poste d’officier : quelle méthode, quel coût ?</h2>
 <p><strong>Proposition : une scène fixe avec quelques boucles précalculées.</strong> Une ventilation tourne, une diode pulse, une étincelle éclate rarement. Le personnage garde une respiration discrète. Les sons de coque, de relais et de souffle sont séparés de la vidéo pour régler leurs volumes et éviter une répétition audible à chaque boucle.</p>
 <div class="comparatif">
