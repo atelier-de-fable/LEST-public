@@ -340,3 +340,6 @@ button:focus-visible { outline: 2px solid var(--edition-amber); outline-offset: 
   .p-exterieur .astre-globe { width:65%; left:20%; top:12%; }
   .p-verriere { left:10%; top:8%; width:80%; height:39%; background:linear-gradient(transparent 70%,#061017bd); }
 }
+
+
+#atelier-temporaire{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:6px 10px;border:1px solid #527772;border-radius:3px;color:#a5e4d4;text-decoration:none;font-size:13px;white-space:nowrap}#atelier-temporaire small{font-size:9px;color:#c6b28f}#atelier-temporaire:hover,#atelier-temporaire:focus-visible{background:#253e3e;outline:1px solid #9bddca;outline-offset:2px}
