@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEST — Modèles des bâtiments</title><link rel="stylesheet" href="outils/atlas/atlas.css">
+<style>
+.modeles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.modele{border:1px solid var(--trait);background:#182326;padding:18px}.modele img{width:100%;display:block;background:radial-gradient(ellipse at 50% 65%,#344144,transparent 68%)}.modele h2{font:26px Georgia,serif;margin:12px 0}.modele p{font-size:13px;color:var(--pale);min-height:60px}.fichiers{display:flex;gap:20px;font-size:12px;border-top:1px solid var(--trait);padding-top:14px}.reference{display:flex;gap:32px;align-items:center;margin-top:32px;border-top:1px solid var(--trait);padding-top:24px}.reference img{width:52%;min-width:0}.reference p{font-size:13px;color:var(--pale)}.reference h2{font:25px Georgia,serif}.note{max-width:800px;color:var(--pale);font-size:13px;margin:18px 0}nav button{text-align:center}@media(max-width:800px){.modeles{grid-template-columns:1fr}.modele img{max-width:500px;margin:auto}.reference{display:block}.reference img{width:100%}.modele p{min-height:0}}
+</style></head><body>
+<header><a href="atelier.html">Tableau de suivi ↗</a><a class="marque" href="index.html">LEST <span>/ MODÈLES</span></a><span class="statut">ÉTUDE DE VOLUMES · V01</span><a id="retour-atlas" href="atlas.html">Atlas et chantiers ↗</a><a href="galerie.html">Galerie ↗</a></header>
+<main><div class="introduction"><div><p class="surtitre">UNE MÊME FAMILLE / HUIT FONCTIONS</p><h1>Les bâtiments prennent du volume.</h1><p>Acier patiné, renforts bronze et lumière cyan.</p></div><div class="edition">01<span>MODÈLES FIXES</span></div></div>
+<nav aria-label="Angle des modèles"><button data-angle="perspective" aria-pressed="true">Vue de chantier</button><button data-angle="dessus" aria-pressed="false">Vue du dessus</button><button data-angle="arriere" aria-pressed="false">Vue arrière</button></nav>
+<div class="modeles">
+<article class="modele" data-modele="abri"><span class="surtitre">01 / LOGER</span><img src="assets/modeles/batiments-v01/abri-perspective.png" alt="Modèle de l’abri, vue de chantier"><h2>Abri</h2><p>Une coque basse autour d’un dôme nervuré. Sas, vitrages et accès rapprochent le bâtiment de l’échelle de l’équipe.</p><div class="fichiers"><a href="assets/modeles/batiments-v01/abri.glb" download>Modèle GLB ↓</a></div></article>
+<article class="modele" data-modele="centrale"><span class="surtitre">02 / ALIMENTER</span><img src="assets/modeles/batiments-v01/centrale-perspective.png" alt="Modèle de la centrale, vue de chantier"><h2>Centrale</h2><p>Une cuve ceinturée, deux échangeurs et une ventilation centrale. La silhouette cylindrique la distingue immédiatement.</p><div class="fichiers"><a href="assets/modeles/batiments-v01/centrale.glb" download>Modèle GLB ↓</a></div></article>
+<article class="modele" data-modele="arsenal"><span class="surtitre">03 / TRANSFORMER</span><img src="assets/modeles/batiments-v01/arsenal-perspective.png" alt="Modèle de l’arsenal, vue de chantier"><h2>Arsenal</h2><p>Un atelier plus large, une grande turbine et des réservoirs arrière. La coque pourra accueillir plusieurs métiers.</p><div class="fichiers"><a href="assets/modeles/batiments-v01/arsenal.glb" download>Modèle GLB ↓</a></div></article>
+</div>
+<p class="note">Première proposition de géométrie, sans animation. Les vues sont des rendus des mêmes modèles sous trois angles. Les pièces restent séparées et modifiables dans Blender. Les proportions et les détails sont à valider avant de remplacer les bâtiments de l’atelier.</p>
+<section class="reference"><img src="assets/astres/estran/v01/batiments.png" alt="Référence peinte des trois bâtiments retenue pour le style"><div><p class="surtitre">LA RÉFÉRENCE COMMUNE</p><h2>Retrouver la même civilisation.</h2><p>Les modèles reprennent les dômes, les ceintures métalliques, les instruments circulaires et les fenêtres cyan de cette planche. Les faces cachées sont proposées ; l’usure peinte pourra être enrichie après validation des volumes.</p></div></section>
+<footer><span>ESTRAN / BÂTIMENTS V01</span><a href="galerie.html">Galerie ↗</a></footer></main>
+<script>
+const complements=[
+ ['paillasse','Labo','Deux chambres instrumentales protégées sur une coque basse. Les optiques en toiture distinguent le travail de mesure.'],
+ ['controle','Centre de contrôle','Un poste circulaire vitré, une tour de conduite et deux antennes courtes pour rassembler les labos du lieu.'],
+ ['noeud','Nœud orbital','Un moyeu avec quatre bras de relais et un connecteur axial. Module d’orbite : aucun escalier ni socle posé au sol.'],
+ ['vivier','Vivier','Trois bacs de culture clos sur un compartiment de recyclage. Le vert appartient au bâtiment, même sur une planète stérile.'],
+ ['fondoir','Fondoir','Deux cuves, des conduites de retour et une prise grillagée. Installation au sol sur un corps contenant de la glace.'],
+];
+for(const [id,nom,description] of complements){
+ const a=document.createElement('article');a.className='modele';a.dataset.modele=id;
+ const i=document.createElement('img');i.src='assets/modeles/batiments-v01/'+id+'-perspective.png';i.alt=nom+' — vue de chantier';
+ const h=document.createElement('h2');h.textContent=nom;const p=document.createElement('p');p.textContent=description;
+ const f=document.createElement('div');f.className='fichiers';
+ for(const [extension,label] of [['glb','GLB']]){const l=document.createElement('a');l.href='assets/modeles/batiments-v01/'+id+'.'+extension;l.download='';l.textContent='Modèle '+label+' ↓';f.append(l);}
+ a.append(i,h,p,f);document.querySelector('.modeles').append(a);
+}
+const corpsRetour=new URLSearchParams(location.search).get('corps');
+if(['estran','ressac','havre'].includes(corpsRetour))document.querySelector('#retour-atlas').href='atlas.html?corps='+corpsRetour;
+document.querySelectorAll('[data-angle]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('[data-angle]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ document.querySelectorAll('[data-modele]').forEach(c=>{const i=c.querySelector('img');i.src='assets/modeles/batiments-v01/'+c.dataset.modele+'-'+b.dataset.angle+'.png';i.alt=c.querySelector('h2').textContent+' — '+b.textContent;});
+});
+</script></body></html>

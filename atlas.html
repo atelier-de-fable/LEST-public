@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LEST — Atlas d’Estran</title>
+  <link rel="stylesheet" href="outils/atlas/atlas.css">
+</head>
+<body>
+  <header><a href="atelier.html">Tableau de suivi ↗</a><a href="index.html" class="marque">LEST <span>/ ATLAS</span></a>
+    <span class="statut">ATELIER VISUEL · RÉGION TÉMOIN</span>
+    <a id="lien-modeles" href="modeles.html">Atelier des modèles ↗</a>
+    <a href="galerie.html">Galerie ↗</a></header>
+  <main>
+    <div class="introduction"><div><p class="surtitre">AMER / ESTRAN / F11</p>
+      <h1>La clairière du terminateur</h1>
+      <p>Un même lieu, du hublot jusqu’aux fondations.</p></div>
+      <div class="edition">01<span>BASALTE · SELS · CUIVRE</span></div></div>
+    <div id="corps-atlas" role="navigation" aria-label="Corps de l’atlas"><span>Explorer un corps</span></div>
+    <nav aria-label="Échelle de la vue">
+      <button data-vue="hublot">01 <span>Hublot</span></button>
+      <button data-vue="orbite">02 <span>Orbite</span></button>
+      <button data-vue="carte">03 <span>Carte</span></button>
+      <button data-vue="secteur">04 <span>Secteur F11</span></button>
+      <button data-vue="chantier" aria-pressed="true">05 <span>Chantier</span></button>
+    </nav>
+    <div class="atelier">
+      <section class="vue" aria-label="Vue de la région">
+        <div class="scene" id="scene">
+          <canvas id="terrain" width="960" height="720" tabindex="0" role="img" aria-label="Chargement du terrain"></canvas>
+          <div id="cases" role="group" aria-label="Emplacements du chantier"></div>
+          <div class="cartouche"><span id="titre-vue">Chantier · F11</span><small id="sous-vue">Chargement…</small></div>
+        </div>
+        <div id="navigation-globe" hidden>
+          <p>Glisse au doigt ou à la souris pour tourner autour d’Estran. Au clavier : flèches gauche et droite sur le globe. Clique sur une case pour la repérer.</p>
+          <div class="actions"><button id="rotation">Suspendre la rotation</button><button id="recentrer">Recentrer sur F11</button></div>
+          <p id="secteur-choisi">F11 · clairière témoin</p><button id="descendre">Ouvrir la clairière F11</button>
+        </div>
+        <div class="legende"><span><i class="vert"></i> Pose possible</span><span><i class="rouge"></i> Terrain inaccessible</span><span><i class="ocre"></i> Traces conservées</span>
+          <label><input id="reperes" type="checkbox" checked> Quadrillage et repères</label>
+          <label id="commande-installations" hidden><input id="installations" type="checkbox" checked> Installations et traces</label></div>
+        <p id="message" role="status" aria-live="polite">Chargement des images…</p>
+      </section>
+      <aside>
+        <p class="surtitre">CHANTIER TÉMOIN</p><h2>Poser. Repartir. Revenir.</h2>
+        <p class="aide">Choisis un bâtiment, puis une case. Sur ordinateur, l’aperçu suit la souris ; au clavier, déplace-toi avec Tab puis valide avec Entrée.</p>
+        <div id="ouvrages"></div>
+        <div class="actions"><button id="demonter">Démonter un bâtiment</button><button id="annuler">Annuler le geste · Échap</button></div>
+        <p id="compte" class="compte"></p>
+        <div class="memoire gisement"><span class="surtitre">VEINE RÉVÉLÉE · MASSE</span>
+          <p id="reserve"></p><meter id="jauge-gisement" min="0" max="1" value="1" aria-label="Part du gisement restant"></meter>
+          <p id="debit"></p>
+          <div class="actions"><button data-extraire="10">Simuler 10 quarts</button><button data-extraire="100">Simuler 100 quarts</button></div>
+          <small>Un extracteur idéal, alimenté à plein régime. Test du déclin de la veine ; coûts et transports ne sont pas simulés. La partie reste indépendante.</small>
+        </div>
+        <div class="memoire"><span class="surtitre">MÉMOIRE DU SOL</span>
+          <p>Les fondations et les pistes restent après le démontage. Tu peux rebâtir dessus.</p>
+          <span id="sauvegarde">Mémoire locale de l’atelier</span></div>
+        <details><summary>Identité de cette région</summary>
+          <p id="identite-region">Estran tourne toujours la même face vers Amer. Cette clairière rocheuse se trouve près de sa bande de crépuscule.</p>
+          <p id="reperes-region">Repères : eau de fonte au nord-ouest, trois blocs de basalte à l’est, un rocher isolé au sud.</p>
+          <p>Acier patiné, renforts bronze et fenêtres cyan : une même famille de bâtiments.</p></details>
+        <details><summary>Ce que teste cet atelier</summary>
+          <p id="composition-region">Le globe et le chantier partagent le même secteur.</p>
+          <p></p>
+          <p>Ce témoin ne consomme aucune ressource et ne modifie pas ta partie. Son emplacement est une référence graphique, pas un site découvert par le scanner.</p>
+          <button id="exporter">Exporter la mémoire</button></details>
+      </aside>
+    </div>
+    <footer><span>ESTRAN / ATLAS V01 · Région proposée, géographie à valider</span><a href="galerie.html">Galerie des images ↗</a></footer>
+  </main>
+  <script src="data/atlas-estran.js"></script>
+  <script src="data/corps.js"></script>
+  <script src="data/atlas-corps.js"></script>
+  <script src="outils/atlas/catalogue.js"></script>
+  <script src="data/batiments.js"></script>
+  <script src="moteur/lieu.js"></script>
+  <script src="moteur/globe-atlas.js"></script>
+  <script src="moteur/gisement-temoin.js"></script>
+  <script src="moteur/memoire-terrain.js"></script>
+  <script src="outils/atlas/gisement.js"></script>
+  <script src="outils/atlas/dessin.js"></script>
+  <script src="outils/atlas/navigation.js"></script>
+  <script src="outils/atlas/atelier.js"></script>
+</body></html>

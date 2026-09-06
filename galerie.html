@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>LEST — la table des propositions</title>
+
+<style>
+  :root {
+    --fond: #0f0f11;
+    --carte: #17171a;
+    --trait: #2a2a30;
+    --texte: #e8e2d6;
+    --pale: #8d8778;
+    --chaud: #c8763a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 0 60px;
+    background: var(--fond); color: var(--texte);
+    font: 15px/1.55 "Segoe UI", system-ui, sans-serif;
+  }
+  header {
+    padding: 28px 32px 22px; border-bottom: 1px solid var(--trait);
+    background: linear-gradient(180deg, #1a1a1e, #131316);
+  }
+  h1 { margin: 0 0 6px; font-size: 25px; font-weight: 600; letter-spacing: .2px; }
+  h2 {
+    margin: 42px 32px 4px; font-size: 18px; font-weight: 600;
+    padding-bottom: 6px; border-bottom: 1px solid var(--trait);
+  }
+  .sous { color: var(--pale); font-size: 13.5px; margin: 0 32px 18px; max-width: 78ch; }
+  header .sous { margin: 0; }
+  b { color: var(--chaud); font-weight: 600; }
+
+  /* ---- le banc d'essai ---- */
+  .banc { display: flex; gap: 26px; flex-wrap: wrap; padding: 0 32px; align-items: flex-start; }
+  .scene {
+    position: relative; width: 960px; height: 600px;  /* 320x200 x3 */
+    overflow: hidden; background: #000;
+    border: 1px solid var(--trait); border-radius: 3px; flex: none;
+  }
+  .scene img {
+    position: absolute; top: 0; left: 0;
+    image-rendering: pixelated;            /* la règle du projet : aucun lissage */
+    transform-origin: 0 0;
+  }
+  /* Le fond dérive à peine, le vaisseau traverse : c'est l'écart des deux
+     vitesses qui fabrique la distance. De la parallaxe, pas de l'animation. */
+  #fond   { animation: derive 8s linear infinite; }
+  #navire { animation: passe  8s linear infinite; }
+  @keyframes derive {
+    from { transform: scale(3) translate(-128px, -66px); }
+    to   { transform: scale(3) translate(-164px, -74px); }
+  }
+  @keyframes passe {
+    from { transform: scale(3) translate(332px, 30px); }
+    to   { transform: scale(3) translate(-296px, 22px); }
+  }
+  .commandes { flex: 1; min-width: 300px; }
+  .choix { margin-bottom: 22px; }
+  .choix h3 { margin: 0 0 8px; font-size: 14px; color: var(--pale); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+  .vignettes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .vignettes button {
+    padding: 0; border: 2px solid var(--trait); border-radius: 3px;
+    background: #000; cursor: pointer; line-height: 0;
+  }
+  .vignettes button:hover { border-color: #4a4a54; }
+  .vignettes button[aria-pressed="true"] { border-color: var(--chaud); }
+  .vignettes img { width: 118px; display: block; image-rendering: pixelated; }
+  .etiquette { display: block; color: var(--pale); font-size: 11px; padding: 3px 4px; line-height: 1.3; }
+
+  /* ---- les galeries ---- */
+  .grille { display: grid; gap: 14px; padding: 0 32px; }
+  .g3 { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+  .g4 { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  figure {
+    margin: 0; background: var(--carte); border: 1px solid var(--trait);
+    border-radius: 3px; overflow: hidden;
+  }
+  figure img { width: 100%; display: block; background: #000; cursor: zoom-in; }
+  figcaption { padding: 8px 10px; font-size: 12.5px; color: var(--pale); }
+  figcaption strong { color: var(--texte); display: block; font-size: 13px; margin-bottom: 2px; }
+
+  /* ---- la loupe ---- */
+  #loupe {
+    position: fixed; inset: 0; background: rgba(0,0,0,.93);
+    display: none; align-items: center; justify-content: center;
+    z-index: 50; cursor: zoom-out; padding: 24px;
+  }
+  #loupe.ouvert { display: flex; }
+  #loupe img { max-width: 100%; max-height: 100%; image-rendering: pixelated; }
+
+  .note {
+    margin: 16px 32px 0; padding: 12px 15px; background: var(--carte);
+    border-left: 3px solid var(--chaud); border-radius: 0 3px 3px 0;
+    font-size: 13.5px; color: var(--pale); max-width: 86ch;
+  }
+  .note b { color: var(--chaud); }
+  code { background: #202026; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; color: #d8cfa8; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LEST — la table des propositions</h1>
+  <p><a href="atelier.html">Atelier · tableau de suivi et étude des animations ↗</a></p>
+  <p class="sous"><a href="atlas.html" style="color:var(--chaud)">Atlas et chantiers — Estran, Ressac, Havre →</a> · <a href="modeles.html" style="color:var(--chaud)">Atelier des modèles 3D →</a></p>
+  <p class="sous"><a href="modeles.html" style="color:var(--chaud)">Voir les trois modèles de bâtiments — Blender et vues fixes →</a></p>
+  <p class="sous">
+    Tout ce que la nuit du 16 août 2026 a peint. Le banc d'essai rejoue le plan
+    du <b>passage</b> à la taille exacte du jeu — 320×200, agrandi trois fois,
+    sans lissage. Choisissez un vaisseau et un fond : la traversée se rejoue
+    aussitôt.
+  </p>
+</header>
+
+<h2>Le passage, en mouvement</h2>
+<p class="sous">
+  ⚠️ Le Ludion passe <b>tuyère en avant</b>, et ce n'est pas une inversion : il
+  freine pour se mettre en orbite, donc il se retourne et pousse contre sa
+  propre course. Le moteur précède la coque.
+</p>
+
+<div class="banc">
+  <div class="scene">
+    <img id="fond"   src="assets/prologue/propositions/estran-D-glace-lest.png" alt="">
+    <img id="navire" src="assets/prologue/propositions/ludion-A-tuyere-allumee-lest.png" alt="">
+  </div>
+
+  <div class="commandes">
+    <div class="choix">
+      <h3>Le vaisseau</h3>
+      <div class="vignettes" id="choix-navire"></div>
+    </div>
+    <div class="choix">
+      <h3>Le fond</h3>
+      <div class="vignettes" id="choix-fond"></div>
+    </div>
+    <p class="sous" style="margin:0">
+      Le montage qui les a produits : <code>dreamshaper-8</code> +
+      <b>normale 0,75</b> + <b>contours 0,55</b>, 768×384, 28 pas. Puis
+      <code>masquer.py</code> pour le détourage et <code>quantifier.py</code>
+      pour la palette.
+    </p>
+  </div>
+</div>
+
+<h2>Les quatre Ludions</h2>
+<p class="sous">Détourés et passés à la palette. Seule la graine et l'éclairage demandé changent.</p>
+<div class="grille g4" id="galerie-ludions"></div>
+
+<h2>Les quatre Estran</h2>
+<p class="sous">
+  Une sphère est le cas où la <b>profondeur</b> est le bon contrôleur — tout son
+  relief va vers la caméra —, exactement là où elle échouait sur un vaisseau vu
+  de profil.
+</p>
+<div class="grille g4" id="galerie-estran"></div>
+
+<h2>Les coques</h2>
+<p class="sous">
+  Cinq campagnes ont été nécessaires. <b>Ces deux-là ne sont pas encore
+  bonnes</b> et je le dis plutôt que de les présenter comme un choix : la
+  matière est là, la densité de détail aussi, mais le contrôle reste trop
+  rigide — le modèle repasse les boîtiers au lieu de peindre entre eux.
+</p>
+<div class="grille g3" id="galerie-coques"></div>
+
+<h2>Douze styles</h2>
+<p class="sous">
+  Même géométrie, même graine, même montage : <b>seule la fin du sujet
+  change</b>. C'est la démonstration que la forme est tenue par les cartes de
+  contrôle et que le texte ne décide plus que de la peau. Les styles sont
+  décrits par leur technique et non par un nom d'artiste — le projet doit rester
+  diffusable.
+</p>
+<div class="grille g3" id="galerie-styles"></div>
+
+<div class="note">
+  <b>Rien de ceci n'est encore dans le jeu</b>, sauf le Ludion A et l'Estran D,
+  qui y sont posés. Changer d'avis coûte une copie de fichier vers
+  <code>assets/prologue/ludion.png</code> ou <code>estran-lest.png</code>.
+</div>
+
+<div id="loupe"><img alt=""></div>
+
+<script>
+/* ⚠️ Les données d'abord, l'affichage ensuite — la même règle que `data/` dans
+   le jeu. On décrit ce qu'on a, la page se contente de le rendre. */
+var LUDIONS = [
+  { f: 'ludion-A-tuyere-allumee', n: 'A — tuyère allumée', d: 'graine 31415. Le moteur est vif : le freinage se voit.' },
+  { f: 'ludion-B-hublots',        n: 'B — hublots',        d: 'graine 1138. Le plus de fenêtres éclairées.' },
+  { f: 'ludion-C-etrave',         n: 'C — étrave',         d: 'graine 1789. Cône d’étrave rouge, contraste franc.' },
+  { f: 'ludion-D-sobre',          n: 'D — sobre',          d: 'graine 1789, éclairage contrasté. Le plus sombre.' }
+];
+var ESTRANS = [
+  { f: 'estran-A-proche',    n: 'A — proche',    d: 'Terminateur franc, cratères, quelques cailloux.' },
+  { f: 'estran-B-large',     n: 'B — large',     d: 'La planète déborde du cadre, champ d’étoiles à droite.' },
+  { f: 'estran-C-lointaine', n: 'C — lointaine', d: 'Petit disque : le vide domine.' },
+  { f: 'estran-D-glace',     n: 'D — glacé',     d: 'Bande claire au terminateur. Celui posé dans le jeu.' }
+];
+var COQUES = [
+  { f: 'coque-A-greeble', n: 'A — greeble dense', d: 'Contours 0,80 · départ 0,90. La plus riche, mais rigide.' },
+  { f: 'coque-B-paroi',   n: 'B — paroi',         d: 'Contours 0,35 · départ 0,75. Plus douce, moins dense.' }
+];
+var STYLES = [
+  ['S01-aerographe-70', 'Aérographe 1970', 'Dégradés lisses, couleurs saturées, lumière propre.'],
+  ['S02-gravure',       'Gravure',         'Taille-douce, hachures croisées, planche technique ancienne.'],
+  ['S03-bleu-technique','Plan technique',  'Trait blanc sur bleu, orthographique, annoté.'],
+  ['S04-argentique',    'Argentique',      'Photographie couleur des années 1970, grain, halo léger.'],
+  ['S05-huile',         'Huile',           'Touches visibles, palette de terres, clair-obscur.'],
+  ['S06-aquarelle',     'Aquarelle',       'Lavis, bords qui fuient, texture du papier.'],
+  ['S07-ligne-claire',  'Ligne claire',    'Aplats, contours noirs précis, album européen.'],
+  ['S08-noir',          'Noir et blanc',   'Contraste dur, ombre profonde, lumière de bord.'],
+  ['S09-serigraphie',   'Sérigraphie',     'Deux ou trois encres, trame de points, formes franches.'],
+  ['S10-matte',         'Peinture mate',   'Profondeur atmosphérique, plan large, désaturé.'],
+  ['S11-crayon',        'Crayon',          'Graphite, lignes de construction, page de carnet.'],
+  ['S12-jeu-1990',      'Jeu de 1990',     'Palette réduite, tramage, sombre. Le seul qui vise ce que LEST est déjà.']
+];
+
+var BASE = 'assets/prologue/propositions/';
+
+function elt(html) {
+  var d = document.createElement('div');
+  d.innerHTML = html.trim();
+  return d.firstChild;
+}
+
+/* Les vignettes de choix, pour le banc d'essai. */
+function poserChoix(id, liste, cible, prefixe) {
+  var zone = document.getElementById(id);
+  liste.forEach(function (o, i) {
+    var b = elt('<button aria-pressed="' + (i === (prefixe === 'nav' ? 0 : 3)) + '">' +
+                '<img src="' + BASE + o.f + '-lest.png" alt="">' +
+                '<span class="etiquette">' + o.n + '</span></button>');
+    b.addEventListener('click', function () {
+      document.getElementById(cible).src = BASE + o.f + '-lest.png';
+      Array.prototype.forEach.call(zone.children, function (a) { a.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      // ⚠️ On relance les DEUX animations, sinon le nouveau calque reprend au
+      // milieu de la course du précédent et le vaisseau apparaît en plein cadre.
+      relancer();
+    });
+    zone.appendChild(b);
+  });
+}
+
+function relancer() {
+  ['fond', 'navire'].forEach(function (id) {
+    var e = document.getElementById(id);
+    e.style.animation = 'none';
+    void e.offsetWidth;          // forcer le navigateur à reprendre le calcul
+    e.style.animation = '';
+  });
+}
+
+function poserGalerie(id, liste, base, suffixe) {
+  var zone = document.getElementById(id);
+  liste.forEach(function (o) {
+    zone.appendChild(elt(
+      '<figure><img src="' + base + o.f + suffixe + '" alt="' + o.n + '">' +
+      '<figcaption><strong>' + o.n + '</strong>' + o.d + '</figcaption></figure>'));
+  });
+}
+
+poserChoix('choix-navire', LUDIONS, 'navire', 'nav');
+poserChoix('choix-fond', ESTRANS, 'fond', 'fond');
+poserGalerie('galerie-ludions', LUDIONS, BASE, '-lest.png');
+poserGalerie('galerie-estran', ESTRANS, BASE, '-lest.png');
+poserGalerie('galerie-coques', COQUES, BASE, '-lest.png');
+
+var zoneStyles = document.getElementById('galerie-styles');
+STYLES.forEach(function (s) {
+  zoneStyles.appendChild(elt(
+    '<figure><img src="assets/modeles/styles/' + s[0] + '.png" alt="' + s[1] + '">' +
+    '<figcaption><strong>' + s[1] + '</strong>' + s[2] + '</figcaption></figure>'));
+});
+
+/* La loupe : un clic ouvre, un clic ferme, Échap ferme aussi. */
+var loupe = document.getElementById('loupe');
+document.addEventListener('click', function (e) {
+  if (e.target.tagName === 'IMG' && e.target.closest('figure')) {
+    loupe.querySelector('img').src = e.target.src;
+    loupe.classList.add('ouvert');
+  } else if (loupe.classList.contains('ouvert')) {
+    loupe.classList.remove('ouvert');
+  }
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') loupe.classList.remove('ouvert');
+});
+</script>
+</body>
+</html>

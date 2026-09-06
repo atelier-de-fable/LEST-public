@@ -1,1 +1,1058 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LEST — le Ludion</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="edition.css"></head><body><div id="cinematique" hidden><div class="cine-scene"></div><div class="cine-voile"></div><p class="cine-legende"></p><button type="button" class="cine-passer" hidden>Passer</button></div><header id="bandeau"><div class="rangee"><span class="titre">LEST</span> <span class="vaisseau">le Ludion &middot; système d'Amer</span><div id="cote-bloc"><div class="cote-tete"><span class="etiq">Cote &middot; intégrité de coque</span> <span id="cote-valeur" data-niveau="ok">—</span></div><div class="piste"><div id="cote-jauge" data-niveau="ok"></div></div></div><div class="bloc"><span class="etiq">Rupture estimée</span> <span class="val" id="rupture">—</span></div><div class="bloc pousse" id="b-equipage"><span class="etiq">Éveillés</span> <span class="e-pile"><span class="val" id="r-eveilles">—</span> <span class="e-dispo" id="r-dispo">—</span></span> <span class="etiq">Dormeurs</span><span class="val" id="r-dormeurs">—</span></div></div><div class="rangee" id="alertes" hidden></div><div class="rangee" id="appels" hidden></div></header><nav id="ecrans"><button class="e-btn" data-ecran="passerelle">La passerelle</button> <button class="e-btn actif" data-ecran="carte">La carte</button> <button class="e-btn" data-ecran="drome">La drôme</button> <button class="e-btn" data-ecran="chantiers">Les lieux</button> <button class="e-btn" data-ecran="journal">Le journal</button><div id="e-horloge"><span class="val" id="date">—</span> <span class="etiq" id="quart">—</span> <span class="val" id="vitesse-nom">—</span><div class="vitesses"><button class="v-btn" data-vitesse="0" title="Pause (Espace)">❚❚</button> <button class="v-btn" data-vitesse="1" title="Lent — 12 s par quart (1)">▶</button> <button class="v-btn" data-vitesse="2" title="Normal — 4 s par quart (2)">▶▶</button> <button class="v-btn" data-vitesse="3" title="Rapide — 1,2 s par quart (3)">▶▶▶</button> <button class="v-btn" data-vitesse="4" title="Vive — 0,4 s par quart (4)">▶▶▶▶</button></div></div><span id="etat-sauvegarde"></span> <button id="b-mission" class="e-outil e-outil-fort" title="Voir le cap de la mission (M)">Cap</button> <button id="b-manuel" class="e-outil" title="Ouvrir le manuel de bord (?)">Manuel</button> <button id="b-son" class="e-outil" title="Régler l'ambiance sonore">Son</button> <button id="b-sauver" class="e-outil" title="Enregistrer dans ce navigateur">Sauver</button> <button id="b-charger" class="e-outil" title="Reprendre la partie enregistrée">Reprendre</button> <span id="graine">—</span></nav><main><section class="ecran" id="ec-passerelle"></section><section class="ecran" id="ec-verriere"></section><section class="ecran" id="ec-station"></section><section class="ecran actif" id="ec-carte"><div id="carte-zone"><canvas id="carte"></canvas><div id="carte-pied"><span><span class="pastille"></span> le Ludion &middot; les orbites avancent d'un quart à chaque quart</span> <span><kbd>Espace</kbd> pause &nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> vitesse &nbsp; <kbd>→</kbd> un quart &nbsp; <kbd>Échap</kbd> désélectionner</span></div></div><aside id="fiche"></aside></section><section class="ecran" id="ec-drome"></section><section class="ecran" id="ec-vaisseau"></section><section class="ecran" id="ec-chantiers"></section><section class="ecran" id="ec-chantier"></section><section class="ecran" id="ec-corps"></section><section class="ecran" id="ec-secteur"></section><section class="ecran" id="ec-journal"><div id="journal"></div></section></main><div id="voile-edition" aria-hidden="true"></div><aside id="tiroir-edition" aria-label="Aide de jeu" aria-hidden="true"><header class="tiroir-tete"><div><span class="sur-titre" id="tiroir-sur-titre">ORDRE DE MISSION</span><h2 id="tiroir-titre">Tenir jusqu'à un monde viable</h2></div><button id="tiroir-fermer" aria-label="Fermer">✕</button></header><div id="tiroir-contenu"></div></aside><div id="accueil-edition" role="dialog" aria-modal="true" aria-labelledby="accueil-titre"><div class="accueil-signal">SIGNAL // LUDION // SYSTÈME D'AMER</div><div class="accueil-marque">LEST</div><h1 id="accueil-titre">Nous n'avons pas été réveillés pour arriver.</h1><p class="accueil-intro">Nous avons été réveillés parce que la coque ne tiendra pas. Mille quatre cents dormeurs, quatre navettes, un système inconnu — et une coque à refaire pour repartir.</p><div class="accueil-enjeu"><span><b>01</b> Gagner du temps</span><span><b>02</b> Sonder</span><span><b>03</b> Fonder</span><span><b>04</b> Transmettre</span></div><div class="accueil-actions"><button id="accueil-nouveau" class="action-primaire">Prendre le quart</button> <button id="accueil-reprendre" class="action-secondaire">Reprendre la sauvegarde</button> <a class="action-secondaire accueil-studio" href="studio-son.html">Écouter les 36 ambiances</a></div><p id="accueil-erreur" role="status"></p><p class="accueil-note">Le temps s'écoule dès que vous le lancez. <kbd>Espace</kbd> met en pause.</p></div><div id="suivre" hidden><button id="suivre-aller">—</button> <button id="suivre-fermer" title="Fermer">✕</button></div><div id="message"><div class="msg-chassis"><div class="msg-portrait"><span id="msg-poste"></span> <span id="msg-nom"></span></div><div class="msg-terminal"><div class="msg-tete"><span class="msg-etiq">Objet</span> <span id="msg-objet"></span> <span id="msg-date"></span></div><div id="msg-texte"></div><div class="msg-pied"><span id="msg-suite" hidden></span> <button id="msg-fermer">Compris</button></div></div></div></div><div id="fin"><div class="fin-carte"><h2 id="fin-titre">Fin de mission</h2><p id="fin-texte"></p><button id="fin-rejouer">Recommencer</button></div></div><script src="data/visuels-astres.js"></script><script src="data/musiques.js"></script><script src="data/config.js"></script><script src="data/prologue.js"></script><script src="data/corps.js"></script><script src="data/flotte.js"></script><script src="data/batiments.js"></script><script src="data/niveaux.js"></script><script src="data/officiers.js"></script><script src="data/paroles.js"></script><script src="data/evenements/situations.js"></script><script src="data/evenements/chronologie.js"></script><script src="data/evenements/conditionnels.js"></script><script src="data/exploration.js"></script><script src="moteur/francais.js"></script><script src="moteur/rng.js"></script><script src="moteur/horloge.js"></script><script src="moteur/systeme.js"></script><script src="moteur/trajet.js"></script><script src="moteur/exploration.js"></script><script src="moteur/flotte.js"></script><script src="moteur/faits.js"></script><script src="moteur/evenements.js"></script><script src="moteur/lieu.js"></script><script src="moteur/parole.js"></script><script src="moteur/partie.js"></script><script src="moteur/sauvegarde.js"></script><script src="vues/cinematique.js"></script><script src="vues/ecrans.js"></script><script src="vues/bandeau.js"></script><script src="vues/journal.js"></script><script src="vues/etiquettes.js"></script><script src="vues/carte.js"></script><script src="vues/astres.js"></script><script src="vues/verriere.js"></script><script src="vues/fiche.js"></script><script src="vues/drome.js"></script><script src="vues/vaisseau.js"></script><script src="vues/chantiers.js"></script><script src="vues/barre-lieu.js"></script><script src="vues/chantier.js"></script><script src="vues/passerelle.js"></script><script src="vues/station.js"></script><script src="vues/message.js"></script><script src="vues/onde.js"></script><script src="vues/reservoir.js"></script><script src="vues/corps.js"></script><script src="vues/secteur.js"></script><script src="vues/partition.js"></script><script src="vues/ambiance.js"></script><script>!function(){"use strict";var e,t,r,n,i,a,u,o,s,c,l,d,m,f,g,p,v,E;function b(e){var t=LEST.CONFIG;return null!=e&&(t=Object.assign({},LEST.CONFIG,{graine:e})),new LEST.Partie(t,n||new LEST.Systeme(LEST.CORPS))}function h(b){function h(e){e&&x(e)}E&&E.fermer(),n=new LEST.Systeme(LEST.CORPS),e=b||new LEST.Partie(LEST.CONFIG,n),t=new LEST.Bandeau(e,document),r=new LEST.VueJournal(e,document.getElementById("journal")),a=new LEST.Fiche(e,n,document.getElementById("fiche")),o=new LEST.VueDrome(e,n,document.getElementById("ec-drome")),s=new LEST.VueVaisseau(e,n,document.getElementById("ec-vaisseau")),c=new LEST.VueChantiers(e,n,document.getElementById("ec-chantiers")),l=new LEST.VueChantier(e,n,document.getElementById("ec-chantier")),d=new LEST.VuePasserelle(e,document.getElementById("ec-passerelle")),(v=new LEST.VueVerriere(e,n,document.getElementById("ec-verriere"))).surRetour=function(){u.montrer("passerelle")},v.surCarte=function(e){y(null,e)},a.surCarte=function(e){y(null,e)},d.surVerriere=function(){u.montrer("verriere")},g=new LEST.VueStation(e,document.getElementById("ec-station")),p=new LEST.VueMessage(e,document),m=new LEST.VueCorps(e,n,document.getElementById("ec-corps")),f=new LEST.VueSecteur(e,n,document.getElementById("ec-secteur")),i=new LEST.Carte(e,n,document.getElementById("carte"),function(e){a.montrer(e)},function(e){y(null,e)}),u||(u=new LEST.Ecrans(document,function(){q()})),o.surChoix=S,s.surRetour=function(){u.montrer("drome")},c.surOuvrir=C,l.surRetour=function(){u.montrer("chantiers")},d.surEcran=function(e){u.montrer(e)},d.surLudion=function(){C(e.lieuLudion.id)},d.surOfficier=I,t.surOfficier=I,t.surLieu=C,p.surFermeture=q,g.surEcran=function(e){u.montrer(e)},g.surPont=function(){u.montrer("passerelle")},g.surCible=function(e){e&&e.navette&&S(e.navette)},c.surVaisseau=h,l.surVaisseau=h,l.surPartir=function(){var t=l.lieu&&l.lieu();if(t&&!e.refusDeConsulter(t.corps))return y(null,t.corps);u.montrer("carte")},s.surPartir=function(){u.montrer("carte")},s.surVaisseau=x,s.surLieu=C,s.surCorps=function(e){y(e)},s.surSecteur=function(e){L(e)},m.surRetour=function(e){var t=e||m.pilote;if(m.quitter(),t)return x(t);u.montrer("carte"),q()},m.surOrdre=q,m.surLieu=C,m.surCaboter=function(e){L(e)},m.surVoirSecteur=function(e,t,r){f.montrer(null,{corps:e,x:t,y:r}),u.montrer("secteur"),q()},f.surOrdre=q,f.surVaisseau=function(e){x(e)},f.surRetour=function(){var e=f.pilote,t=f.regarde;f.quitter(),y(e,e?null:t?t.corps:null)},f.surRentre=function(e,t){s.surLance(e,null,t)},s.surLance=function(t,r,n){var i=e.flotte.parId(t);if(n){var a=e.navettesDansLeSecteur(n.corps,n.x,n.y);return B(t,i?i.nom:t),a.length?L(a[0].id):(f.montrer(null,n),u.montrer("secteur"),q())}var o=r?e.flotte.navettes.find(function(n){if(n.id===t||n.mission||n.permanent)return!1;var i=e.lieuDe(n);return i&&i.id===r}):null;o?(B(t,i?i.nom:t),x(o.id)):r?(B(t,i?i.nom:t),C(r)):q()},s.surOrdre=q,c.surChoix=q,l.surOrdre=q,a.rafraichir(),document.getElementById("graine").textContent="graine "+e.rng.graine,document.getElementById("fin").classList.remove("visible"),b||(e.consigner("Sortie de transit. Le Ludion est en orbite basse autour d'Estran. Soixante d'entre nous sont réveillés, mille quatre cents dorment encore. La coque tient. Pour l'instant.","neutre","Second"),e.consigner("J'ai refait les relevés trois fois, capitaine. La corrosion progresse. Nous ne repartirons pas d'ici sans avoir refait une coque.","alerte","Maître")),E=new LEST.Ambiance(e,document),e.horloge.aChaqueQuart(q),e.horloge.demarrer(),q()}function y(t,r){var n=t&&e.flotte?e.flotte.parId(t):null,i=r||(n?n.lieu:null),o=e.refusDeConsulter(i);if(o)return a.montrer(i),a.refuser(o),void("carte"!==u.courant&&u.montrer("carte"));m.montrer(t,r),u.montrer("corps"),q()}function L(e){f.montrer(e),u.montrer("secteur"),q()}function I(e){g.montrer(e),u.montrer("station"),q()}function S(t){var r=t&&e.flotte?e.flotte.parId(t):null;if(r){var n=e.positionDe(r);return n&&("cabotage"===n.genre||"pose"===n.genre&&r.pas)?L(r.id):!n||"survol"!==n.genre&&"pose"!==n.genre?void x(r.id):y(r.id)}}function x(e){s.montrer(e),u.montrer("vaisseau"),q()}function B(e,t){var r=document.getElementById("suivre"),n=document.getElementById("suivre-aller");n.textContent="Suivre "+t+" ›",n.onclick=function(){k(),x(e)},r.hidden=!1,clearTimeout(B._t),B._t=setTimeout(k,1e4)}function k(){clearTimeout(B._t),document.getElementById("suivre").hidden=!0}function C(e){l.montrer(e),u.montrer("chantier")}document.getElementById("suivre-fermer").addEventListener("click",k);var T=null;function q(){!function(){var t=u&&"vaisseau"===u.courant?s.choisi:null;if(t&&"ludion"!==t){var r=e.flotte&&e.flotte.parId(t);if(r&&!r.permanent){var n=!!r.mission;if(T&&T.id===t&&T.enMission&&!n){var i=e.lieuDe(r);if(i)return T=null,C(i.id)}T={id:t,enMission:n}}else T=null}else T=null}(),t.rafraichir(),r.rafraichir(),i.rafraichir(),a.rafraichir(),o.rafraichir(),s.rafraichir(),c.rafraichir(),l.rafraichir(),d.rafraichir(),v.rafraichir(),g.rafraichir(),p.rafraichir(),m.rafraichir(),f.rafraichir(),function(){if(!e)return;var t=D(),r=t.filter(function(e){return e.fait}).length;document.getElementById("b-mission").textContent="Cap "+r+"/"+t.length,"cap"===P.dataset.mode&&"false"===P.getAttribute("aria-hidden")&&j()}(),E&&E.rafraichir(u&&u.courant,"secteur"===u.courant?f.regarde&&f.regarde.corps:m.corpsId),e.terminee&&function(){var t=document.getElementById("fin");if(t.classList.contains("visible"))return;document.getElementById("fin-texte").textContent=e.journal[0]?e.journal[0].texte:"",t.classList.add("visible")}()}document.addEventListener("keydown",function(t){if(e&&!e.terminee&&!(t.target.closest('input, select, textarea, [contenteditable="true"]')||P&&"false"===P.getAttribute("aria-hidden"))){if(u&&"secteur"===u.courant&&f.pilote){var r={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[t.key];if(r){t.preventDefault();var n=e.flotte.parId(f.pilote);return n&&n.pas&&(f.refus=e.cabotageVers(n.id,n.pas.x+r[0],n.pas.y+r[1])),void q()}}switch(t.key){case" ":t.preventDefault(),e.horloge.basculerPause();break;case"0":e.horloge.reglerVitesse(0);break;case"1":e.horloge.reglerVitesse(1);break;case"2":e.horloge.reglerVitesse(2);break;case"3":e.horloge.reglerVitesse(3);break;case"4":e.horloge.reglerVitesse(4);break;case"ArrowRight":e.horloge.avancer();break;case"Escape":i.choisir(null),a.montrer(null);break;default:return}q()}}),document.getElementById("fin-rejouer").addEventListener("click",function(){e&&e.horloge.arreter(),h()});var w="lest.partie";function V(e,t){var r=document.getElementById("etat-sauvegarde");r.textContent=e,r.dataset.ton=t||"",clearTimeout(V._t),V._t=setTimeout(function(){r.textContent=""},4e3)}function O(){var t,r=null;try{r=localStorage.getItem(w)}catch(e){}if(!r)return V("Aucune partie enregistrée.","alerte");try{t=LEST.Sauvegarde.relire(JSON.parse(r),b)}catch(e){return V("Sauvegarde illisible : "+e.message,"alerte")}return t.erreur?V(t.erreur,"alerte"):(e&&e.horloge.arreter(),h(t.partie),V("Partie reprise · quart "+e.horloge.quart,"ok"),!0)}function A(){var e=!1;try{e=!!localStorage.getItem(w)}catch(e){}var t=document.getElementById("b-charger");t.disabled=!e,t.title=e?"Reprendre la partie enregistrée":"Rien d'enregistré pour l'instant"}document.getElementById("b-sauver").addEventListener("click",function(){try{localStorage.setItem(w,JSON.stringify(LEST.Sauvegarde.ecrire(e))),V("Partie enregistrée · quart "+e.horloge.quart,"ok")}catch(e){V("Impossible d'enregistrer : "+e.message,"alerte")}A()}),document.getElementById("b-charger").addEventListener("click",O),A();var M,P=document.getElementById("tiroir-edition"),R=document.getElementById("voile-edition");function D(){var t=e&&e.sondes?e.sondes.size:0,r=e&&e.lieux?e.lieux.length:0;return[{fait:(e?e.horloge.quart:0)>0,titre:"Stabiliser le quart",texte:"Laisser passer un quart et lire les variations."},{fait:t>1,titre:"Ouvrir le système",texte:"Mettre une navette en orbite d’un corps inconnu."},{fait:r>1,titre:"Poser un premier ancrage",texte:"Acheminer le kit puis fonder un lieu hors du Ludion."},{fait:e&&e.flotte.navettes.some(function(e){return e.permanent&&"pipeline"===e.permanent.type}),titre:"Former un réseau",texte:"Mettre en place un convoi permanent entre deux lieux."},{fait:e&&e.cote>=50&&r>2,titre:"Tenir plusieurs postes",texte:"Garder au moins trois lieux et une Cote de 50 ou plus."}]}function j(){var t=D(),r=t.find(function(e){return!e.fait});document.getElementById("tiroir-sur-titre").textContent="ORDRE DE MISSION",document.getElementById("tiroir-titre").textContent=r?r.titre:"Les premiers postes tiennent",document.getElementById("tiroir-contenu").innerHTML='<p class="cap-directive">'+(r?r.texte:"Ces repères décrivent votre situation actuelle. La traversée continue.")+'</p><div class="cap-liste">'+t.map(function(e,t){return'<div class="cap-etape '+(e.fait?"faite":"")+'"><span>'+(e.fait?"✓":("0"+(t+1)).slice(-2))+"</span><div><b>"+e.titre+"</b><small>"+e.texte+"</small></div></div>"}).join("")+'</div><div class="cap-lecture"><span>Coque <b>'+e.cote.toFixed(1)+"</b></span><span>Quart <b>"+e.horloge.quart+"</b></span><span>Lieux <b>"+e.lieux.length+"</b></span><span>Corps relevés <b>"+e.sondes.size+"</b></span></div>"}function z(e,t,r){return'<label class="mix-ligne"><span><b>'+t+"</b><em>"+Math.round(100*r)+'%</em></span><input type="range" min="0" max="1" step="0.01" value="'+r+'" data-reglage="'+e+'"></label>'}function N(t){var r;!e||e.terminee||document.getElementById("message").classList.contains("visible")||("true"===P.getAttribute("aria-hidden")&&(M=document.activeElement),P.dataset.mode=t,"cap"===t?j():"son"===t?(r=E.reglages,document.getElementById("tiroir-sur-titre").textContent="MIXAGE DU LUDION",document.getElementById("tiroir-titre").textContent="Ambiance sonore",document.getElementById("tiroir-contenu").innerHTML='<p class="cap-directive">Le vaisseau réagit à la vitesse, à la coque, aux départs, aux arrivées et aux découvertes.</p><div class="mixeur">'+z("general","Volume général",r.general)+z("ambiance","Machinerie et coque",r.ambiance)+z("musique","Musique du lieu",r.musique)+'<p class="mix-note">Musique du lieu : <strong id="musique-courante">'+LEST.PISTES_MUSICALES[E.pisteId].name+"</strong></p>"+z("effets","Actions et alertes",r.effets)+'<label class="mix-muet"><span><b>Silence à bord</b><small>Coupe toutes les couches sonores.</small></span><input id="mix-muet" type="checkbox" '+(r.muet?"checked":"")+'></label></div><div class="audio-test"><button id="audio-activer" class="action-primaire">Activer et tester le son</button><span id="etat-audio">En attente d’activation</span></div><p><a href="studio-son.html" target="_blank" rel="noopener">Ouvrir l’atelier sonore — 36 boucles</a></p><p class="mix-note">Vous devez entendre deux notes montantes. Les sons sont générés en temps réel, sans téléchargement.</p>',Array.prototype.forEach.call(document.querySelectorAll('.mixeur input[type="range"]'),function(e){e.addEventListener("input",function(){E.regler(e.dataset.reglage,Number(e.value)),e.previousElementSibling.querySelector("em").textContent=Math.round(100*e.value)+"%"})}),document.getElementById("mix-muet").addEventListener("change",function(e){E.regler("muet",e.target.checked)}),document.getElementById("audio-activer").addEventListener("click",function(){E.tester()})):(document.getElementById("tiroir-sur-titre").textContent="MANUEL DE BORD",document.getElementById("tiroir-titre").textContent="Une question par écran",document.getElementById("tiroir-contenu").innerHTML='<div class="manuel-grille"><article><b>La passerelle</b><p>Parlez aux officiers. Leurs avis rendent lisibles les urgences et les savoirs.</p></article><article><b>La carte</b><p>Comparez les distances : les orbites rendent chaque fenêtre unique.</p></article><article><b>La drôme</b><p>Choisissez une navette, armez un pilote, chargez puis donnez un ordre.</p></article><article><b>Les lieux</b><p>Chaque stock est local. Surveillez surtout sa variation par quart.</p></article><article><b>Le journal</b><p>Relisez arrivées, pénuries, découvertes et conséquences.</p></article></div><div class="raccourcis"><kbd>Espace</kbd> pause <kbd>1–4</kbd> vitesse <kbd>→</kbd> un quart <kbd>M</kbd> cap <kbd>?</kbd> manuel</div>'),P.setAttribute("aria-hidden","false"),R.setAttribute("aria-hidden","false"),document.getElementById("tiroir-fermer").focus())}function F(){P.setAttribute("aria-hidden","true"),R.setAttribute("aria-hidden","true"),M&&(M.focus(),M=null)}document.getElementById("b-mission").addEventListener("click",function(){N("cap")}),document.getElementById("b-manuel").addEventListener("click",function(){N("manuel")}),document.getElementById("b-son").addEventListener("click",function(){N("son")}),document.getElementById("tiroir-fermer").addEventListener("click",F),R.addEventListener("click",F),document.addEventListener("keydown",function(e){"Escape"===e.key&&F(),e.target.closest('input, select, textarea, [contenteditable="true"]')||("m"!==e.key&&"M"!==e.key||e.ctrlKey||e.metaKey||N("cap"),("?"===e.key||"/"===e.key&&e.shiftKey)&&N("manuel"))}),Object.defineProperty(LEST,"partie",{get:function(){return e}}),Object.defineProperty(LEST,"systeme",{get:function(){return n}}),Object.defineProperty(LEST,"carte",{get:function(){return i}}),Object.defineProperty(LEST,"secteur",{get:function(){return f}});var _=document.getElementById("accueil-edition"),U=Array.from(document.body.children).filter(function(e){return e!==_&&"SCRIPT"!==e.tagName});function G(t){if(t){if(!O())return void(document.getElementById("accueil-erreur").textContent=document.getElementById("etat-sauvegarde").textContent)}else h(),e.horloge.reglerVitesse(0),q();_.hidden=!0,U.forEach(function(e){e.inert=!1}),document.getElementById("b-mission").focus()}U.forEach(function(e){e.inert=!0}),document.getElementById("accueil-reprendre").disabled=document.getElementById("b-charger").disabled,document.getElementById("accueil-nouveau").addEventListener("click",function(){G(!1)}),document.getElementById("accueil-reprendre").addEventListener("click",function(){G(!0)}),document.getElementById("accueil-nouveau").focus()}()</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEST — le Ludion</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="edition.css">
+</head>
+<body>
+
+
+<div id="cinematique" hidden>
+  <div class="cine-scene"></div>
+  <div class="cine-voile"></div>
+  <p class="cine-legende"></p>
+  <button type="button" class="cine-passer" hidden>Passer</button>
+</div>
+
+
+<header id="bandeau">
+
+  <div class="rangee">
+    <span class="titre">LEST</span>
+    <span class="vaisseau">le Ludion &middot; système d'Amer</span>
+
+    <div id="cote-bloc">
+      <div class="cote-tete">
+        <span class="etiq">Cote &middot; intégrité de coque</span>
+        <span id="cote-valeur" data-niveau="ok">—</span>
+      </div>
+      <div class="piste"><div id="cote-jauge" data-niveau="ok"></div></div>
+    </div>
+
+    <div class="bloc">
+      <span class="etiq">Rupture estimée</span>
+      <span class="val" id="rupture">—</span>
+    </div>
+
+
+    <div class="bloc pousse" id="b-equipage">
+      <span class="etiq">Éveillés</span>
+      <span class="e-pile"><span class="val" id="r-eveilles">—</span>
+        <span class="e-dispo" id="r-dispo">—</span></span>
+      <span class="etiq">Dormeurs</span><span class="val" id="r-dormeurs">—</span>
+    </div>
+  </div>
+
+
+  <div class="rangee" id="alertes" hidden></div>
+
+
+  <div class="rangee" id="appels" hidden></div>
+</header>
+
+
+<nav id="ecrans">
+
+  <button class="e-btn" data-ecran="passerelle">La passerelle</button>
+  <button class="e-btn actif" data-ecran="carte">La carte</button>
+  <button class="e-btn" data-ecran="drome">La drôme</button>
+
+  <button class="e-btn" data-ecran="chantiers">Les lieux</button>
+  <button class="e-btn" data-ecran="journal">Le journal</button>
+
+
+  <div id="e-horloge">
+    <span class="val" id="date">—</span>
+    <span class="etiq" id="quart">—</span>
+    <span class="val" id="vitesse-nom">—</span>
+    <div class="vitesses">
+      <button class="v-btn" data-vitesse="0" title="Pause (Espace)">❚❚</button>
+      <button class="v-btn" data-vitesse="1" title="Lent — 12 s par quart (1)">▶</button>
+      <button class="v-btn" data-vitesse="2" title="Normal — 4 s par quart (2)">▶▶</button>
+      <button class="v-btn" data-vitesse="3" title="Rapide — 1,2 s par quart (3)">▶▶▶</button>
+      <button class="v-btn" data-vitesse="4" title="Vive — 0,4 s par quart (4)">▶▶▶▶</button>
+    </div>
+  </div>
+  <span id="etat-sauvegarde"></span>
+  <button id="b-mission" class="e-outil e-outil-fort" title="Voir le cap de la mission (M)">Cap</button>
+  <button id="b-manuel" class="e-outil" title="Ouvrir le manuel de bord (?)">Manuel</button>
+  <button id="b-son" class="e-outil" title="Régler l'ambiance sonore">Son</button>
+  <button id="b-sauver" class="e-outil" title="Enregistrer dans ce navigateur">Sauver</button>
+  <button id="b-charger" class="e-outil" title="Reprendre la partie enregistrée">Reprendre</button>
+  <span id="graine">—</span>
+</nav>
+
+
+<main>
+
+
+  <section class="ecran" id="ec-passerelle"></section>
+  <section class="ecran" id="ec-verriere"></section>
+
+
+  <section class="ecran" id="ec-station"></section>
+
+
+  <section class="ecran actif" id="ec-carte">
+    <div id="carte-zone">
+      <canvas id="carte"></canvas>
+      <div id="carte-pied">
+        <span><span class="pastille"></span> le Ludion &middot; les orbites avancent d'un quart à chaque quart</span>
+        <span>
+          <kbd>Espace</kbd> pause &nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> vitesse
+          &nbsp; <kbd>→</kbd> un quart &nbsp; <kbd>Échap</kbd> désélectionner
+        </span>
+      </div>
+    </div>
+    <aside id="fiche"></aside>
+  </section>
+
+
+  <section class="ecran" id="ec-drome"></section>
+
+
+  <section class="ecran" id="ec-vaisseau"></section>
+
+  <section class="ecran" id="ec-chantiers"></section>
+
+
+  <section class="ecran" id="ec-chantier"></section>
+
+
+  <section class="ecran" id="ec-corps"></section>
+
+
+  <section class="ecran" id="ec-secteur"></section>
+
+  <section class="ecran" id="ec-journal">
+    <div id="journal"></div>
+  </section>
+
+</main>
+
+<div id="voile-edition" aria-hidden="true"></div>
+<aside id="tiroir-edition" aria-label="Aide de jeu" aria-hidden="true">
+  <header class="tiroir-tete">
+    <div><span class="sur-titre" id="tiroir-sur-titre">ORDRE DE MISSION</span><h2 id="tiroir-titre">Tenir jusqu'à un monde viable</h2></div>
+    <button id="tiroir-fermer" aria-label="Fermer">✕</button>
+  </header>
+  <div id="tiroir-contenu"></div>
+</aside>
+
+
+<div id="accueil-edition" role="dialog" aria-modal="true" aria-labelledby="accueil-titre">
+  <div class="accueil-signal">SIGNAL // LUDION // SYSTÈME D'AMER</div>
+  <div class="accueil-marque">LEST</div>
+  <h1 id="accueil-titre">Nous n'avons pas été réveillés pour arriver.</h1>
+  <p class="accueil-intro">Nous avons été réveillés parce que la coque ne tiendra pas. Mille quatre cents dormeurs, quatre navettes, un système inconnu — et une coque à refaire pour repartir.</p>
+  <div class="accueil-enjeu">
+    <span><b>01</b> Gagner du temps</span><span><b>02</b> Sonder</span><span><b>03</b> Fonder</span><span><b>04</b> Transmettre</span>
+  </div>
+  <div class="accueil-actions">
+    <button id="accueil-nouveau" class="action-primaire">Prendre le quart</button>
+    <button id="accueil-reprendre" class="action-secondaire">Reprendre la sauvegarde</button>
+    <a class="action-secondaire" href="atelier.html">Ouvrir l’atelier</a>
+    <a class="action-secondaire accueil-studio" href="studio-son.html">Écouter les 36 ambiances</a>
+  </div>
+  <p id="accueil-erreur" role="status"></p>
+  <p class="accueil-note">Le temps s'écoule dès que vous le lancez. <kbd>Espace</kbd> met en pause.</p>
+</div>
+
+
+
+<div id="suivre" hidden>
+  <button id="suivre-aller">—</button>
+  <button id="suivre-fermer" title="Fermer">✕</button>
+</div>
+
+
+<div id="message" role="dialog" aria-modal="true" aria-labelledby="msg-objet">
+  <div class="msg-chassis">
+    <div class="msg-portrait">
+      <span id="msg-poste"></span>
+      <span id="msg-nom"></span>
+    </div>
+    <div class="msg-terminal">
+      <div class="msg-tete">
+        <span class="msg-etiq">Objet</span>
+        <span id="msg-objet"></span>
+        <span id="msg-date"></span>
+      </div>
+      <div id="msg-texte"></div>
+      <div class="msg-pied">
+        <audio id="msg-audio" controls preload="none" hidden aria-label="Écouter le rapport"></audio>
+        <span id="msg-suite" hidden></span>
+        <button id="msg-fermer">Compris</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="fin">
+  <div class="fin-carte">
+    <h2 id="fin-titre">Fin de mission</h2>
+    <p id="fin-texte"></p>
+    <button id="fin-rejouer">Recommencer</button>
+  </div>
+</div>
+
+
+<script src="data/visuels-astres.js"></script>
+<script src="data/musiques.js"></script>
+<script src="data/scenes-officiers.js"></script>
+<script src="data/config.js"></script>
+<script src="data/prologue.js"></script>
+<script src="data/arrivee.js"></script>
+<script src="data/corps.js"></script>
+<script src="data/flotte.js"></script>
+<script src="data/batiments.js"></script>
+<script src="data/niveaux.js"></script>
+<script src="data/officiers.js"></script>
+<script src="data/paroles.js"></script>
+<script src="data/evenements/situations.js"></script>
+<script src="data/evenements/chronologie.js"></script>
+<script src="data/evenements/conditionnels.js"></script>
+<script src="data/exploration.js"></script>
+<script src="moteur/francais.js"></script>
+<script src="moteur/rng.js"></script>
+<script src="moteur/horloge.js"></script>
+<script src="moteur/systeme.js"></script>
+<script src="moteur/trajet.js"></script>
+<script src="moteur/exploration.js"></script>
+<script src="moteur/flotte.js"></script>
+<script src="moteur/faits.js"></script>
+<script src="moteur/evenements.js"></script>
+<script src="moteur/lieu.js"></script>
+<script src="moteur/parole.js"></script>
+<script src="moteur/partie.js"></script>
+<script src="moteur/sauvegarde.js"></script>
+<script src="moteur/arrivee.js"></script>
+<script src="vues/cinematique.js"></script>
+<script src="vues/ecrans.js"></script>
+<script src="vues/bandeau.js"></script>
+<script src="vues/journal.js"></script>
+<script src="vues/etiquettes.js"></script>
+<script src="vues/carte.js"></script>
+<script src="vues/astres.js"></script>
+<script src="vues/verriere.js"></script>
+<script src="vues/fiche.js"></script>
+<script src="vues/drome.js"></script>
+<script src="vues/vaisseau.js"></script>
+<script src="vues/chantiers.js"></script>
+<script src="vues/barre-lieu.js"></script>
+<script src="vues/chantier.js"></script>
+<script src="vues/passerelle.js"></script>
+<script src="vues/station.js"></script>
+<script src="vues/message.js"></script>
+<script src="vues/onde.js"></script>
+
+<script src="vues/reservoir.js"></script>
+<script src="vues/corps.js"></script>
+<script src="vues/secteur.js"></script>
+<script src="vues/partition.js"></script>
+<script src="vues/ambiance.js"></script>
+
+<script>
+/* ===========================================================================
+   Assemblage. C'est le seul endroit où moteur et vues se rencontrent.
+   =========================================================================== */
+(function () {
+  'use strict';
+
+  var partie, bandeau, vueJournal, systeme, carte, fiche;
+  var ecrans, vueDrome, vueVaisseau, vueChantiers, vueChantier, vuePasserelle;
+  var vueCorps, vueSecteur, vueStation, vueMessage, vueVerriere, ambiance;
+
+  /**
+   * Fabrique une partie neuve. Passée telle quelle à la relecture d'une
+   * sauvegarde : c'est l'assemblage qui sait quelle config et quel système
+   * utiliser, `moteur/sauvegarde.js` ne connaît ni l'un ni l'autre.
+   */
+  function fabriquer(graine) {
+    var cfg = LEST.CONFIG;
+    if (graine !== null && graine !== undefined) {
+      cfg = Object.assign({}, LEST.CONFIG, { graine: graine });
+    }
+    // Une reprise depuis l’accueil précède la création de la première partie.
+    return new LEST.Partie(cfg, systeme || new LEST.Systeme(LEST.CORPS));
+  }
+
+  function demarrer(reprise) {
+    if (ambiance) ambiance.fermer();
+    systeme    = new LEST.Systeme(LEST.CORPS);
+    partie     = reprise || new LEST.Partie(LEST.CONFIG, systeme);
+    bandeau    = new LEST.Bandeau(partie, document);
+    vueJournal = new LEST.VueJournal(partie, document.getElementById('journal'));
+    fiche      = new LEST.Fiche(partie, systeme, document.getElementById('fiche'));
+    vueDrome   = new LEST.VueDrome(partie, systeme, document.getElementById('ec-drome'));
+    vueVaisseau = new LEST.VueVaisseau(partie, systeme, document.getElementById('ec-vaisseau'));
+    vueChantiers = new LEST.VueChantiers(partie, systeme, document.getElementById('ec-chantiers'));
+    vueChantier = new LEST.VueChantier(partie, systeme, document.getElementById('ec-chantier'));
+    vuePasserelle = new LEST.VuePasserelle(partie, document.getElementById('ec-passerelle'));
+    vueVerriere = new LEST.VueVerriere(partie, systeme, document.getElementById('ec-verriere'));
+    vueVerriere.surRetour = function () { ecrans.montrer('passerelle'); };
+    vueVerriere.surCarte = function (id) { ouvrirCorps(null, id); };
+    fiche.surCarte = function (id) { ouvrirCorps(null, id); };
+    vuePasserelle.surVerriere = function () { ecrans.montrer('verriere'); };
+    vueStation = new LEST.VueStation(partie, document.getElementById('ec-station'));
+    vueMessage = new LEST.VueMessage(partie, document);
+    vueCorps    = new LEST.VueCorps(partie, systeme, document.getElementById('ec-corps'));
+    vueSecteur  = new LEST.VueSecteur(partie, systeme, document.getElementById('ec-secteur'));
+    carte      = new LEST.Carte(partie, systeme, document.getElementById('carte'),
+                                function (id) { fiche.montrer(id); },
+                                // Double-clic sur un astre : sa carte, en
+                                // consultation. Demandé par Vincent le 12/08.
+                                function (id) { ouvrirCorps(null, id); });
+
+    if (!ecrans) {
+      // Un écran caché ne se redessine pas : il est donc périmé au moment où on
+      // le montre. On le rafraîchit à l'arrivée plutôt que de tenir à jour ce
+      // que personne ne regarde.
+      // Le bandeau ne se masque plus nulle part : depuis qu'il a maigri
+      // (12 août 2026), il ne porte que du global — Cote, rupture, équipage —
+      // et rien ne fait double emploi avec la barre basse d'un lieu.
+      ecrans = new LEST.Ecrans(document, function () { rafraichir(); });
+    }
+
+    // ⚠️ **CHOISIR UN VAISSEAU DANS LA DRÔME MÈNE LÀ OÙ IL EST**, pas à une
+    // fiche qui le décrit. *Demandé par Vincent le 14 août 2026 : « quand on
+    // clique sur un vaisseau de la drôme qui est en vol dans un secteur ou un
+    // corps, il faudrait que ça nous amène directement à l'écran où il est
+    // avec le contrôle du vaisseau activé ».*
+    //
+    // La drôme répond à *lequel ?* — mais une fois choisi, le détour par son
+    // écran ne servait qu'à cliquer « Revenir au secteur ». Un écran qui ne
+    // sert qu'à en ouvrir un autre est un écran de trop.
+    //
+    // ⚠️ Et c'est **la même fonction que le lien d'un avis** (`surCible`
+    // ci-dessous) : deux portes, un seul chemin. Deux aiguillages auraient
+    // divergé — c'est le défaut n°2 de la séance des écrans, et il s'est
+    // produit trois fois.
+    vueDrome.surChoix = versLaOuIlEst;
+    vueVaisseau.surRetour = function () { ecrans.montrer('drome'); };
+
+    // Même partage côté chantiers : la liste, puis le lieu.
+    vueChantiers.surOuvrir = ouvrirLieu;
+    vueChantier.surRetour = function () { ecrans.montrer('chantiers'); };
+
+    // La passerelle ne fabrique rien : elle ouvre des écrans qui existent
+    // déjà. La coursive passe par `ouvrirLieu`, exactement comme la liste des
+    // lieux — c'est « deux portes, un seul chemin » (`ECRANS.md` §7).
+    vuePasserelle.surEcran = function (cle) { ecrans.montrer(cle); };
+    vuePasserelle.surLudion = function () { ouvrirLieu(partie.lieuLudion.id); };
+
+    // ⚠️ **L'ÉCART 2 DU 12 AOÛT EST COMBLÉ.** `vues/passerelle.js` menait
+    // directement à l'écran de domaine faute de station, et s'en excusait en
+    // une ligne. La station existe : un clic sur un officier mène chez lui, et
+    // c'est de chez lui qu'on ouvre son domaine. `ECRANS.md` §2 l'avait
+    // annoncé au mot près — « la passerelle change de cible, pas de forme ».
+    vuePasserelle.surOfficier = ouvrirStation;
+    // La sollicitation du bandeau mène à la MÊME fonction que la passerelle et
+    // que la colonne de portraits. Trois portes, un seul chemin (`ECRANS.md`
+    // §7) — et c'est ce qui garantit qu'entrer par le bandeau lève bien la
+    // sollicitation, au lieu de laisser la ligne allumée sur un officier qu'on
+    // vient d'écouter.
+    bandeau.surOfficier = ouvrirStation;
+    // Une alerte du bandeau mène droit au lieu concerné. Même fonction que la
+    // liste des lieux et que la coursive : trois portes, un seul chemin.
+    bandeau.surLieu = ouvrirLieu;
+
+    // Fermer un message forcé rafraîchit tout : il a pu poser une sollicitation,
+    // ouvrir un savoir, ou changer un stock. On ne tient pas la liste de ce qui
+    // dépend de quoi — même règle que pour un ordre donné.
+    vueMessage.surFermeture = rafraichir;
+    vueStation.surEcran = function (cle) { ecrans.montrer(cle); };
+    vueStation.surPont = function () { ecrans.montrer('passerelle'); };
+
+    // ⚠️ **LE LIEN D'UN AVIS MÈNE LÀ OÙ LA CHOSE EST, ET C'EST ICI QU'ON LE
+    // SAIT.** *Demandé par Vincent le 14 août 2026.* La station passe une
+    // cible, l'assemblage choisit l'écran — secteur, carte du corps, ou écran
+    // du vaisseau — en réutilisant les mêmes fonctions que partout ailleurs.
+    // Un aiguillage dans la vue aurait recréé « S'amarrer » : un second chemin
+    // qui refait ses propres contrôles.
+    vueStation.surCible = function (cible) {
+      if (!cible || !cible.navette) return;
+      versLaOuIlEst(cible.navette);
+    };
+
+    // Le raccourci demandé le 11 août : depuis un chantier, aller droit au
+    // vaisseau qui y est à quai. Quand il y en a plusieurs, on ouvre la drôme
+    // déjà filtrée sur ce poste — choisir reste au joueur.
+    // ⚠️ **CE DÉTOUR PAR LA DRÔME EST TOMBÉ LE 14 AOÛT 2026.** *Vincent : « si
+    // je clique sur l'icône vaisseau avec le numéro, ça ne m'amène pas dans la
+    // drôme avec un filtre, ça doit m'amener dans un des vaisseaux pour donner
+    // l'ordre — ce sont les mêmes navettes, pas de choix à faire ».*
+    //
+    // Les deux vues choisissent désormais elles-mêmes le vaisseau (le premier
+    // libre d'ordre), et cette fonction n'a plus qu'un cas. On la garde parce
+    // qu'elle nomme le chemin, et parce qu'un `lieuId` sans navette ne doit
+    // ouvrir ni la drôme ni rien : le bouton est grisé, on n'arrive pas ici.
+    //
+    // La drôme reste pour ce à quoi elle sert : **chercher dans toute la
+    // flotte**, pas trancher entre quatre coques identiques au même quai.
+    function versVaisseaux(navetteId) {
+      if (navetteId) ouvrirVaisseau(navetteId);
+    }
+    vueChantiers.surVaisseau = versVaisseaux;
+    vueChantier.surVaisseau = versVaisseaux;
+
+    // « Partir » : quitter le lieu, retrouver le ciel. Quand la carte d'un
+    // corps existera (M4b), un chantier au sol reviendra sur ELLE — d'ici là,
+    // les deux cas mènent à la carte du système. Voir `ECRANS.md` §7.
+    // ⚠️ **« PARTIR » D'UN LIEU REMONTE À LA CARTE DE SON CORPS**, pas au ciel.
+    // *Demandé par Vincent le 14 août 2026.* Le code portait déjà la promesse,
+    // en commentaire, depuis le 11 : *« quand la carte d'un corps existera
+    // (M4b), un chantier au sol reviendra sur ELLE — d'ici là les deux cas
+    // mènent à la carte du système »*. Elle existe depuis le 12 au soir, et
+    // personne n'était revenu décrocher la note. ➜ **Une promesse en
+    // commentaire attend qu'un joueur la redemande** — c'est la même leçon que
+    // la « pause franche et assumée », promise sept jours avant d'être codée.
+    //
+    // On y va en CONSULTATION : quitter un écran n'est pas un ordre, donc on
+    // n'engage aucune navette au passage.
+    vueChantier.surPartir = function () {
+      var lieu = vueChantier.lieu && vueChantier.lieu();
+      if (lieu && !partie.refusDeConsulter(lieu.corps)) {
+        return ouvrirCorps(null, lieu.corps);
+      }
+      ecrans.montrer('carte');
+    };
+    vueVaisseau.surPartir = function () { ecrans.montrer('carte'); };
+
+    // La bande du bas de l'écran vaisseau : d'un chantier à ses vaisseaux
+    // sans repasser par la drôme — c'est le §4 quater, encore lui.
+    vueVaisseau.surVaisseau = ouvrirVaisseau;
+    vueVaisseau.surLieu = ouvrirLieu;
+
+    // La carte du corps : on y descend depuis l'écran d'un vaisseau, on en
+    // revient vers lui. Le bouton « Quitter » annule le départ — la navette,
+    // elle, reste où elle est : quitter un écran n'est pas un ordre.
+    vueVaisseau.surCorps = function (id) { ouvrirCorps(id); };
+
+    // ⚠️ **CELUI-CI N'A JAMAIS ÉTÉ BRANCHÉ, et il a fallu un vérificateur pour
+    // s'en apercevoir — le 13 août 2026 au soir.** `vues/vaisseau.js` appelle
+    // `surSecteur()` à deux endroits depuis le matin même : le bouton
+    // « ↩ Revenir au secteur XX » du portrait, et « Ouvrir le secteur › » de
+    // l'ordre Explorer. Les deux tapaient sur la méthode vide de la classe.
+    // **Deux boutons morts, dans les deux portes de l'exploration**, et aucune
+    // des treize suites ne pouvait le voir : un no-op ne lève pas.
+    //
+    // C'est le pendant exact du symptôme que ce projet nomme depuis deux jours
+    // — *« le moteur sait, l'écran se tait »*. Ici : **la vue appelle, personne
+    // ne répond.** Le jumeau `surCorps` était câblé une ligne plus haut.
+    vueVaisseau.surSecteur = function (id) { ouvrirSecteur(id); };
+
+    vueCorps.surRetour = function (navetteId) {
+      // On rend le temps en partant : la pause n'appartient qu'à la carte.
+      var pilote = navetteId || vueCorps.pilote;
+      vueCorps.quitter();
+      if (pilote) return ouvrirVaisseau(pilote);
+      ecrans.montrer('carte');
+      rafraichir();
+    };
+    vueCorps.surOrdre = rafraichir;
+    vueCorps.surLieu = ouvrirLieu;
+
+    // L'écran B. La carte du corps y mène par « Descendre » ; on en revient
+    // sur elle, et c'est la même navette qu'on retrouve aux commandes. Le
+    // temps est arrêté des deux côtés, donc il n'y a rien à rendre entre les
+    // deux — seul le retour vers la carte du système le rend.
+    vueCorps.surCaboter = function (navetteId) { ouvrirSecteur(navetteId); };
+    // Regarder un secteur sans y descendre : la consultation, une échelle plus
+    // bas. Aucun vaisseau engagé, donc rien à refuser.
+    vueCorps.surVoirSecteur = function (corpsId, x, y) {
+      vueSecteur.montrer(null, { corps: corpsId, x: x, y: y });
+      ecrans.montrer('secteur');
+      rafraichir();
+    };
+    vueSecteur.surOrdre = rafraichir;
+    vueSecteur.surVaisseau = function (id) { ouvrirVaisseau(id); };
+    vueSecteur.surRetour = function () {
+      var id = vueSecteur.pilote;
+      // ⚠️ **APRÈS UN CRASH, IL N'Y A PLUS DE PILOTE — mais il y a toujours un
+      // corps.** *Signalé par Vincent : « quand on quitte l'écran de secteur
+      // après un crash, on revient sur la carte du système ».* `ouvrirCorps`
+      // recevait `null` des deux côtés, ne savait plus de quel astre on
+      // parlait, et retombait sur le ciel. Le secteur regardé, lui, sait.
+      var vu = vueSecteur.regarde;
+      vueSecteur.quitter();
+      ouvrirCorps(id, id ? null : (vu ? vu.corps : null));
+    };
+
+    // ⚠️ **UNE NAVETTE QUI RENTRE DEPUIS LE SECTEUR EST UNE NAVETTE QUI PART.**
+    // *Bouton demandé par Vincent le 13 août 2026.* On réutilise l'enchaînement
+    // d'après « Lancer » plutôt que d'en écrire un second : il sait déjà
+    // reprendre la barre de celle qui reste en bas, retomber en consultation
+    // s'il n'y a plus personne, et proposer de suivre celle qui monte. Le
+    // récrire ici, c'était refaire les deux défauts que ce bloc a coûté.
+    vueSecteur.surRentre = function (id, quitte) {
+      vueVaisseau.surLance(id, null, quitte);
+    };
+
+    // Après « Lancer » : on est mené au prochain vaisseau prêt AU MÊME
+    // endroit, ou à l'écran du lieu s'il n'y en a plus — et le mot « Suivre »
+    // permet de rattraper celui qui part. Demandé par Vincent le 12 août 2026.
+    vueVaisseau.surLance = function (idLance, lieuId, quitte) {
+      var lance = partie.flotte.parId(idLance);
+
+      // ⚠️ **ON REDESCEND VERS CEUX QU'ON A LAISSÉS EN BAS.** *Demandé par
+      // Vincent le 13 août 2026 : « si deux vaisseaux sont dans le secteur et
+      // qu'on en renvoie un sur le Ludion, on repasse tout seul sur l'écran du
+      // deuxième ».* C'est l'enchaînement d'après « Lancer », à l'échelle du
+      // secteur : on ne renvoie pas le joueur au ciel quand il lui reste
+      // quelqu'un au sol — souvent celui qu'il était venu secourir.
+      //
+      // ⚠️⚠️ **ET C'EST `quitte` QUI DÉCIDE, PAS LE DERNIER SECTEUR REGARDÉ.**
+      // Première version : elle lisait `vueSecteur.regarde`, qui survit à la
+      // visite. Résultat trouvé par Vincent en jouant — *« quel que soit le
+      // vaisseau que je clique, je reviens au Guindeau et je ne peux plus rien
+      // faire »* : **tous les départs du jeu retombaient dans le dernier
+      // secteur visité**, pour toujours. J'avais fait une règle globale d'un
+      // cas local, et c'est la faute la plus grave de la séance.
+      if (quitte) {
+        var restees = partie.navettesDansLeSecteur(quitte.corps, quitte.x, quitte.y);
+        proposerDeSuivre(idLance, lance ? lance.nom : idLance);
+        // Quelqu'un reste en bas : on prend sa barre. Personne : on redescend
+        // quand même, en consultation.
+        //
+        // ⚠️ **Le second cas manquait**, et Vincent l'a trouvé : *« je me
+        // retrouve dans l'écran vaisseau alors que je n'ai pas cliqué
+        // suivre ».* Sans navette restante, l'enchaînement retombait sur le
+        // cas « partie du large » — qui laisse sur l'écran du vaisseau parce
+        // qu'il n'y a nulle part où aller. Mais **il y avait où aller** : le
+        // secteur qu'on venait de quitter, et qu'on n'a pas fini de fouiller.
+        if (restees.length) return ouvrirSecteur(restees[0].id);
+        vueSecteur.montrer(null, quitte);
+        ecrans.montrer('secteur');
+        return rafraichir();
+      }
+      var pret = lieuId ? partie.flotte.navettes.find(function (x) {
+        if (x.id === idLance || x.mission || x.permanent) return false;
+        var q = partie.lieuDe(x);
+        return q && q.id === lieuId;
+      }) : null;
+
+      if (pret) {
+        proposerDeSuivre(idLance, lance ? lance.nom : idLance);
+        ouvrirVaisseau(pret.id);
+      } else if (lieuId) {
+        proposerDeSuivre(idLance, lance ? lance.nom : idLance);
+        ouvrirLieu(lieuId);
+      } else {
+        // Parti du large : il n'y a ni vaisseau suivant ni lieu où aller.
+        // On reste sur son écran, qui montre déjà le trajet — rien à suivre.
+        rafraichir();
+      }
+    };
+
+    // Un ordre donné change les stocks, le journal et la carte : on rafraîchit
+    // tout, plutôt que de tenir une liste de ce qui dépend de quoi.
+    vueVaisseau.surOrdre = rafraichir;
+    vueChantiers.surChoix = rafraichir;
+    vueChantier.surOrdre = rafraichir;
+    fiche.rafraichir();
+
+    document.getElementById('graine').textContent = 'graine ' + partie.rng.graine;
+    document.getElementById('fin').classList.remove('visible');
+
+    // Une partie reprise a déjà son journal : le rouvrir sur « sortie de
+    // transit » ferait croire qu'on a tout perdu.
+    if (!reprise) {
+      LEST.ouvrirArrivee(partie);
+      partie.consigner(
+        "Sortie de transit. Le Ludion est en orbite basse autour d'Estran. " +
+        "Soixante d'entre nous sont réveillés, mille quatre cents dorment encore. " +
+        "La coque tient. Pour l'instant.", 'neutre', 'Second');
+
+      partie.consigner(
+        "J'ai refait les relevés trois fois, capitaine. La corrosion progresse. " +
+        "Nous ne repartirons pas d'ici sans avoir refait une coque.", 'alerte', 'Maître');
+    }
+
+    ambiance = new LEST.Ambiance(partie, document);
+    LEST.ambiance = ambiance;
+
+    // La vue se rafraîchit à chaque quart, et aussi en continu pour rester
+    // réactive aux clics même en pause.
+    partie.horloge.aChaqueQuart(rafraichir);
+    partie.horloge.demarrer();
+    rafraichir();
+  }
+
+  // Plus de `lieuRegarde()` : le bandeau a maigri le 12 août 2026 et ne
+  // montre plus aucun stock. Les stocks sont locaux, et ils se lisent sur
+  // l'écran de chaque lieu — c'est la barre basse qui a repris le rôle.
+
+  /**
+   * Ouvre la carte d'un corps. Avec une navette : on la pilote, et le temps
+   * s'arrête. Sans : consultation, et le temps court.
+   *
+   * ⚠️ **C'est ici qu'on refuse un corps non relevé**, et nulle part ailleurs.
+   * Signalé par Vincent le 13 août 2026 : le double-clic ouvrait la carte de
+   * n'importe quelle planète, y compris une qu'aucun vaisseau n'avait jamais
+   * approchée. Les deux portes — le double-clic et l'ordre « Explorer » —
+   * passent par cette fonction : le contrôle est donc unique, comme le chemin.
+   * La raison vient du moteur et s'affiche sur la fiche du corps, à côté de la
+   * carte du système : on refuse là où le geste a été fait.
+   */
+  function ouvrirCorps(navetteId, corpsId) {
+    var n = navetteId && partie.flotte ? partie.flotte.parId(navetteId) : null;
+    var cible = corpsId || (n ? n.lieu : null);
+    var refus = partie.refusDeConsulter(cible);
+    if (refus) {
+      fiche.montrer(cible);
+      fiche.refuser(refus);
+      // On ne change pas d'écran quand on est déjà devant la carte du système :
+      // voler la navigation au joueur pour lui dire non serait deux punitions.
+      if (ecrans.courant !== 'carte') ecrans.montrer('carte');
+      return;
+    }
+    vueCorps.montrer(navetteId, corpsId);
+    ecrans.montrer('corps');
+    rafraichir();
+  }
+
+  /**
+   * Ouvre l'écran B sur le secteur d'une navette. Comme `ouvrirCorps`, c'est
+   * le SEUL chemin : la carte du corps y mène par « Descente », l'écran d'un
+   * vaisseau par « Revenir au secteur ». Deux portes, un chemin.
+   */
+  function ouvrirSecteur(navetteId) {
+    vueSecteur.montrer(navetteId);
+    ecrans.montrer('secteur');
+    rafraichir();
+  }
+
+  /**
+   * Ouvre la station d'un officier. Le SEUL chemin — la passerelle y mène, et
+   * la colonne de portraits d'une station y mène aussi, d'un officier à
+   * l'autre. Même règle que `ouvrirCorps` : deux portes, un chemin.
+   *
+   * C'est `montrer()` qui lève la sollicitation, donc elle se lève par où que
+   * l'on entre. Une seconde porte qui aurait oublié de le faire aurait laissé
+   * un officier marqué « demande à vous parler » juste après qu'on l'a écouté.
+   */
+  function ouvrirStation(id) {
+    vueStation.montrer(id);
+    ecrans.montrer('station');
+    rafraichir();
+  }
+
+  /**
+   * ⚠️ **LA SEULE RÉPONSE À « MÈNE-MOI À CE VAISSEAU ».**
+   *
+   * Trois portes s'en servent — la drôme, le lien d'un avis, et demain tout ce
+   * qui nommera un vaisseau. Elles ne décident pas de l'écran : elles disent
+   * *quel vaisseau*, et c'est ici qu'on sait où il est. Un aiguillage recopié
+   * dans une vue est le défaut n°2 de la séance des écrans — **une donnée
+   * affichée à deux endroits finit toujours par diverger**, et une navigation
+   * n'y échappe pas.
+   *
+   * La règle suit `Partie.positionDe()`, seul auteur de la position :
+   *
+   *     cabotage · posée au ras du sol   l'écran du secteur, navette prise
+   *     survol · posée sur la carte      la carte du corps, navette prise
+   *     quai · orbite · transit          son propre écran — il n'y a pas
+   *                                      d'ailleurs où le montrer
+   *
+   * Dans les deux premiers cas la navette est **pilotée d'entrée** : c'est ce
+   * que Vincent demandait, et c'est cohérent avec le reste — on n'arrive
+   * jamais sur ces écrans en spectateur quand on a nommé un vaisseau.
+   */
+  function versLaOuIlEst(navetteId) {
+    var n = navetteId && partie.flotte ? partie.flotte.parId(navetteId) : null;
+    if (!n) return;
+    var pos = partie.positionDe(n);
+    if (pos && (pos.genre === 'cabotage' || (pos.genre === 'pose' && n.pas))) {
+      return ouvrirSecteur(n.id);
+    }
+    if (pos && (pos.genre === 'survol' || pos.genre === 'pose')) {
+      return ouvrirCorps(n.id);
+    }
+    ouvrirVaisseau(n.id);
+  }
+
+  /** Ouvre l'écran d'un vaisseau, d'où qu'on vienne. */
+  function ouvrirVaisseau(id) {
+    vueVaisseau.montrer(id);
+    ecrans.montrer('vaisseau');
+    // `montrer` sur l'écran déjà ouvert ne redessine pas : on force, pour que
+    // passer d'un vaisseau à l'autre depuis la bande du bas se voie.
+    rafraichir();
+  }
+
+  /**
+   * Le mot « Suivre » : un vaisseau vient de partir, un clic ramène à son
+   * écran. Il n'interrompt rien.
+   *
+   * ⚠️ **IL S'EFFACE MAINTENANT TOUT SEUL**, et la règle du 12 août est
+   * corrigée. Elle disait : *« il attend d'être cliqué, fermé, ou remplacé par
+   * le départ suivant »* — l'intention était bonne (ne rien imposer), le
+   * résultat ne l'était pas. *Vincent : « le bouton popup reste affiché
+   * indéfiniment au lieu de quelques secondes et couvre un bouton existant ».*
+   * Une proposition qui ne part jamais cesse d'être une proposition : elle
+   * devient un morceau d'interface posé sur les autres.
+   *
+   * Dix secondes : le temps de la lire et de décider, pas celui de l'oublier.
+   */
+  function proposerDeSuivre(navetteId, nom) {
+    var boite = document.getElementById('suivre');
+    var aller = document.getElementById('suivre-aller');
+    aller.textContent = 'Suivre ' + nom + ' ›';
+    aller.onclick = function () {
+      cacherSuivre();
+      ouvrirVaisseau(navetteId);
+    };
+    boite.hidden = false;
+    clearTimeout(proposerDeSuivre._t);
+    proposerDeSuivre._t = setTimeout(cacherSuivre, 10000);
+  }
+
+  function cacherSuivre() {
+    clearTimeout(proposerDeSuivre._t);
+    document.getElementById('suivre').hidden = true;
+  }
+  document.getElementById('suivre-fermer').addEventListener('click', cacherSuivre);
+
+  /**
+   * Ouvre l'écran d'un lieu, d'où qu'on vienne : la liste des lieux, ou la
+   * coursive de la passerelle. Une seule fonction pour les deux portes — c'est
+   * ce qui empêche qu'un second chemin se mette à faire ses propres contrôles.
+   */
+  function ouvrirLieu(id) {
+    vueChantier.montrer(id);
+    ecrans.montrer('chantier');
+  }
+
+  // Le vaisseau qu'on regarde, et s'il était en route au dernier coup d'œil.
+  // C'est ce qui permet de voir l'ARRIVÉE comme un événement : mission au
+  // quart précédent, à quai maintenant.
+  var transit = null;
+
+  /**
+   * Demandé par Vincent le 12 août 2026 : quand on regarde l'écran d'un
+   * vaisseau en transit et qu'il accoste, on est amené directement sur
+   * l'écran du lieu — le journal du lieu y consigne l'arrivée au même moment.
+   *
+   * Trois cas où l'on NE bascule pas, et ils sont voulus :
+   *   - arrivée en orbite ou au large : il n'y a pas de lieu où aller ;
+   *   - un convoi permanent : il accoste à chaque rotation, basculer à
+   *     chacune rendrait son écran inconsultable ;
+   *   - on regarde un autre écran : on ne vole jamais la navigation au joueur.
+   */
+  function suivreArrivee() {
+    var id = (ecrans && ecrans.courant === 'vaisseau') ? vueVaisseau.choisi : null;
+    if (!id || id === 'ludion') { transit = null; return; }
+    var n = partie.flotte && partie.flotte.parId(id);
+    if (!n || n.permanent) { transit = null; return; }
+
+    var enMission = !!n.mission;
+    if (transit && transit.id === id && transit.enMission && !enMission) {
+      var lieu = partie.lieuDe(n);
+      if (lieu) { transit = null; return ouvrirLieu(lieu.id); }
+    }
+    transit = { id: id, enMission: enMission };
+  }
+
+  function rafraichir() {
+    suivreArrivee();
+    bandeau.rafraichir();
+    vueJournal.rafraichir();
+    carte.rafraichir();
+    fiche.rafraichir();          // la distance depuis le Ludion change à chaque quart
+    vueDrome.rafraichir();       // et le prix de chaque destination aussi
+    vueVaisseau.rafraichir();
+    vueChantiers.rafraichir();
+    vueChantier.rafraichir();
+    vuePasserelle.rafraichir();
+    vueVerriere.rafraichir();
+    vueStation.rafraichir();
+    vueMessage.rafraichir();
+    vueCorps.rafraichir();
+    vueSecteur.rafraichir();
+    rafraichirCap();
+    if (ambiance) ambiance.rafraichir(ecrans && ecrans.courant,
+      ecrans.courant === 'secteur' ? (vueSecteur.regarde && vueSecteur.regarde.corps) : vueCorps.corpsId);
+    if (partie.terminee) afficherFin();
+  }
+
+  function afficherFin() {
+    var boite = document.getElementById('fin');
+    if (boite.classList.contains('visible')) return;
+    document.getElementById('fin-texte').textContent =
+      partie.journal[0] ? partie.journal[0].texte : '';
+    boite.classList.add('visible');
+  }
+
+  // --- Raccourcis clavier ---
+  document.addEventListener('keydown', function (e) {
+    if (!partie || partie.terminee) return;
+    if (e.target.closest('input, select, textarea, [contenteditable="true"]') ||
+        (tiroir && tiroir.getAttribute('aria-hidden') === 'false')) return;
+
+    // ⚠️ **Les flèches pilotent quand on cabote**, et elles reprennent la main
+    // sur « → avance d'un quart ». *Demandé par Vincent : « on explorait en
+    // avançant en rase-mottes avec des flèches de direction ».* Le conflit est
+    // réel mais sans conséquence : dans un secteur le temps est arrêté, donc
+    // avancer d'un quart n'aurait aucun sens là où on se trouve.
+    if (ecrans && ecrans.courant === 'secteur' && vueSecteur.pilote) {
+      var vers = { ArrowUp: [0, -1], ArrowDown: [0, 1],
+                   ArrowLeft: [-1, 0], ArrowRight: [1, 0] }[e.key];
+      if (vers) {
+        e.preventDefault();
+        var n = partie.flotte.parId(vueSecteur.pilote);
+        if (n && n.pas) {
+          vueSecteur.refus =
+            partie.cabotageVers(n.id, n.pas.x + vers[0], n.pas.y + vers[1]);
+        }
+        rafraichir();
+        return;
+      }
+    }
+
+    switch (e.key) {
+      case ' ':          e.preventDefault(); partie.horloge.basculerPause(); break;
+      case '0':          partie.horloge.reglerVitesse(0); break;
+      case '1':          partie.horloge.reglerVitesse(1); break;
+      case '2':          partie.horloge.reglerVitesse(2); break;
+      case '3':          partie.horloge.reglerVitesse(3); break;
+      case '4':          partie.horloge.reglerVitesse(4); break;
+      case 'ArrowRight': partie.horloge.avancer(); break;   // pas à pas
+      case 'Escape':     carte.choisir(null); fiche.montrer(null); break;
+      default: return;
+    }
+    rafraichir();
+  });
+
+  // Pas d'écouteur 'resize' ici : la carte surveille sa propre boîte avec un
+  // ResizeObserver. Une fenêtre qui ne bouge pas peut quand même faire rétrécir
+  // la carte — il suffit que le bandeau passe sur une ligne de plus.
+
+  document.getElementById('fin-rejouer').addEventListener('click', function () {
+    if (partie) partie.horloge.arreter();
+    demarrer();
+  });
+
+  // --- La sauvegarde ---------------------------------------------------------
+  // Dans `localStorage`, un seul emplacement. C'est le plus court chemin qui
+  // marche en double-cliquant sur index.html : un vrai fichier demanderait une
+  // boîte de dialogue de téléchargement à chaque sauvegarde, et un import
+  // manuel à chaque reprise. À revoir le jour où l'on voudra plusieurs parties.
+  var CLE = 'lest.partie';
+
+  function dire(texte, ton) {
+    var e = document.getElementById('etat-sauvegarde');
+    e.textContent = texte;
+    e.dataset.ton = ton || '';
+    // Le message s'efface : un bandeau qui garde « sauvé » pendant une heure
+    // ne dit plus rien de l'instant où l'on a sauvé.
+    clearTimeout(dire._t);
+    dire._t = setTimeout(function () { e.textContent = ''; }, 4000);
+  }
+
+  function sauver() {
+    try {
+      localStorage.setItem(CLE, JSON.stringify(LEST.Sauvegarde.ecrire(partie)));
+      dire('Partie enregistrée · quart ' + partie.horloge.quart, 'ok');
+    } catch (e) {
+      // Un `localStorage` plein ou refusé (navigation privée) doit se dire, pas
+      // se taire : croire qu'on a sauvé est pire que savoir qu'on n'a pas pu.
+      dire('Impossible d\'enregistrer : ' + e.message, 'alerte');
+    }
+    majBoutons();
+  }
+
+  function charger() {
+    var brut = null;
+    try { brut = localStorage.getItem(CLE); } catch (e) { /* accès refusé */ }
+    if (!brut) return dire('Aucune partie enregistrée.', 'alerte');
+
+    var lu;
+    try {
+      lu = LEST.Sauvegarde.relire(JSON.parse(brut), fabriquer);
+    } catch (e) {
+      return dire('Sauvegarde illisible : ' + e.message, 'alerte');
+    }
+    if (lu.erreur) return dire(lu.erreur, 'alerte');
+
+    if (partie) partie.horloge.arreter();
+    demarrer(lu.partie);
+    dire('Partie reprise · quart ' + partie.horloge.quart, 'ok');
+    return true;
+  }
+
+  function majBoutons() {
+    var existe = false;
+    try { existe = !!localStorage.getItem(CLE); } catch (e) { /* accès refusé */ }
+    var b = document.getElementById('b-charger');
+    b.disabled = !existe;
+    b.title = existe ? 'Reprendre la partie enregistrée'
+                     : 'Rien d\'enregistré pour l\'instant';
+  }
+
+  document.getElementById('b-sauver').addEventListener('click', sauver);
+  document.getElementById('b-charger').addEventListener('click', charger);
+  majBoutons();
+
+  // Cap et manuel : une couche d'orientation, jamais une seconde règle.
+  var tiroir = document.getElementById('tiroir-edition');
+  var voile = document.getElementById('voile-edition');
+  var retourTiroir;
+
+  function objectifs() {
+    var sondes = partie && partie.sondes ? partie.sondes.size : 0;
+    var lieux = partie && partie.lieux ? partie.lieux.length : 0;
+    var q = partie ? partie.horloge.quart : 0;
+    return [
+      { fait: q > 0, titre: 'Stabiliser le quart', texte: 'Laisser passer un quart et lire les variations.' },
+      { fait: sondes > 1, titre: 'Ouvrir le système', texte: 'Mettre une navette en orbite d’un corps inconnu.' },
+      { fait: lieux > 1, titre: 'Poser un premier ancrage', texte: 'Acheminer le kit puis fonder un lieu hors du Ludion.' },
+      { fait: partie && partie.flotte.navettes.some(function (n) { return n.permanent && n.permanent.type === 'pipeline'; }), titre: 'Former un réseau', texte: 'Mettre en place un convoi permanent entre deux lieux.' },
+      { fait: partie && partie.cote >= 50 && lieux > 2, titre: 'Tenir plusieurs postes', texte: 'Garder au moins trois lieux et une Cote de 50 ou plus.' }
+    ];
+  }
+
+  function rafraichirCap() {
+    if (!partie) return;
+    var o = objectifs();
+    var faits = o.filter(function (x) { return x.fait; }).length;
+    document.getElementById('b-mission').textContent = 'Cap ' + faits + '/' + o.length;
+    if (tiroir.dataset.mode === 'cap' && tiroir.getAttribute('aria-hidden') === 'false') remplirCap();
+  }
+
+  function remplirCap() {
+    var o = objectifs();
+    var prochain = o.find(function (x) { return !x.fait; });
+    document.getElementById('tiroir-sur-titre').textContent = 'ORDRE DE MISSION';
+    document.getElementById('tiroir-titre').textContent = prochain ? prochain.titre : 'Les premiers postes tiennent';
+    document.getElementById('tiroir-contenu').innerHTML =
+      '<p class="cap-directive">' + (prochain ? prochain.texte : 'Ces repères décrivent votre situation actuelle. La traversée continue.') + '</p>' +
+      '<div class="cap-liste">' + o.map(function (x, i) {
+        return '<div class="cap-etape ' + (x.fait ? 'faite' : '') + '"><span>' + (x.fait ? '✓' : ('0' + (i + 1)).slice(-2)) + '</span><div><b>' + x.titre + '</b><small>' + x.texte + '</small></div></div>';
+      }).join('') + '</div>' +
+      '<div class="cap-lecture"><span>Coque <b>' + partie.cote.toFixed(1) + '</b></span><span>Quart <b>' + partie.horloge.quart + '</b></span><span>Lieux <b>' + partie.lieux.length + '</b></span><span>Corps relevés <b>' + partie.sondes.size + '</b></span></div>';
+  }
+
+  function remplirManuel() {
+    document.getElementById('tiroir-sur-titre').textContent = 'MANUEL DE BORD';
+    document.getElementById('tiroir-titre').textContent = 'Une question par écran';
+    document.getElementById('tiroir-contenu').innerHTML =
+      '<div class="manuel-grille">' +
+      '<article><b>La passerelle</b><p>Parlez aux officiers. Leurs avis rendent lisibles les urgences et les savoirs.</p></article>' +
+      '<article><b>La carte</b><p>Comparez les distances : les orbites rendent chaque fenêtre unique.</p></article>' +
+      '<article><b>La drôme</b><p>Choisissez une navette, armez un pilote, chargez puis donnez un ordre.</p></article>' +
+      '<article><b>Les lieux</b><p>Chaque stock est local. Surveillez surtout sa variation par quart.</p></article>' +
+      '<article><b>Le journal</b><p>Relisez arrivées, pénuries, découvertes et conséquences.</p></article>' +
+      '</div><div class="raccourcis"><kbd>Espace</kbd> pause <kbd>1–4</kbd> vitesse <kbd>→</kbd> un quart <kbd>M</kbd> cap <kbd>?</kbd> manuel</div>';
+  }
+
+  function remplirSon() {
+    var r = ambiance.reglages;
+    document.getElementById('tiroir-sur-titre').textContent = 'MIXAGE DU LUDION';
+    document.getElementById('tiroir-titre').textContent = 'Ambiance sonore';
+    document.getElementById('tiroir-contenu').innerHTML =
+      '<p class="cap-directive">Le vaisseau réagit à la vitesse, à la coque, aux départs, aux arrivées et aux découvertes.</p>' +
+      '<div class="mixeur">' +
+      curseur('general', 'Volume général', r.general) +
+      curseur('ambiance', 'Machinerie et coque', r.ambiance) +
+      curseur('musique', 'Musique du lieu', r.musique) +
+      '<p class="mix-note">Musique du lieu : <strong id="musique-courante">' + LEST.PISTES_MUSICALES[ambiance.pisteId].name + '</strong></p>' +
+      curseur('effets', 'Actions et alertes', r.effets) +
+      curseur('voix', 'Voix des officiers', r.voix) +
+      '<label class="mix-muet"><span><b>Silence à bord</b><small>Coupe toutes les couches sonores.</small></span><input id="mix-muet" type="checkbox" ' + (r.muet ? 'checked' : '') + '></label>' +
+      '</div><div class="audio-test"><button id="audio-activer" class="action-primaire">Activer et tester le son</button><span id="etat-audio">En attente d’activation</span></div>' +
+      '<p><a href="studio-son.html" target="_blank" rel="noopener">Ouvrir l’atelier sonore — 36 boucles</a></p>' +
+      '<p class="mix-note">Vous devez entendre deux notes montantes. Les sons sont générés en temps réel, sans téléchargement.</p>';
+    Array.prototype.forEach.call(document.querySelectorAll('.mixeur input[type="range"]'), function (input) {
+      input.addEventListener('input', function () {
+        ambiance.regler(input.dataset.reglage, Number(input.value));
+        input.previousElementSibling.querySelector('em').textContent = Math.round(input.value * 100) + '%';
+      });
+    });
+    document.getElementById('mix-muet').addEventListener('change', function (e) { ambiance.regler('muet', e.target.checked); });
+    document.getElementById('audio-activer').addEventListener('click', function () { ambiance.tester(); });
+  }
+
+  function optionMusique(cle, nom, courant) { return '<option value="' + cle + '" ' + (cle === courant ? 'selected' : '') + '>' + nom + '</option>'; }
+
+  function curseur(cle, nom, valeur) {
+    return '<label class="mix-ligne"><span><b>' + nom + '</b><em>' + Math.round(valeur * 100) + '%</em></span>' +
+      '<input type="range" min="0" max="1" step="0.01" value="' + valeur + '" data-reglage="' + cle + '"></label>';
+  }
+
+  function ouvrirTiroir(mode) {
+    if (!partie || partie.terminee || document.getElementById('message').classList.contains('visible')) return;
+    if (tiroir.getAttribute('aria-hidden') === 'true') retourTiroir = document.activeElement;
+    tiroir.dataset.mode = mode;
+    if (mode === 'cap') remplirCap(); else if (mode === 'son') remplirSon(); else remplirManuel();
+    tiroir.setAttribute('aria-hidden', 'false');
+    voile.setAttribute('aria-hidden', 'false');
+    document.getElementById('tiroir-fermer').focus();
+  }
+  function fermerTiroir() {
+    tiroir.setAttribute('aria-hidden', 'true');
+    voile.setAttribute('aria-hidden', 'true');
+    if (retourTiroir) { retourTiroir.focus(); retourTiroir = null; }
+  }
+  document.getElementById('b-mission').addEventListener('click', function () { ouvrirTiroir('cap'); });
+  document.getElementById('b-manuel').addEventListener('click', function () { ouvrirTiroir('manuel'); });
+  document.getElementById('b-son').addEventListener('click', function () { ouvrirTiroir('son'); });
+  document.getElementById('tiroir-fermer').addEventListener('click', fermerTiroir);
+  voile.addEventListener('click', fermerTiroir);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') fermerTiroir();
+    if (e.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+    if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) ouvrirTiroir('cap');
+    if (e.key === '?' || (e.key === '/' && e.shiftKey)) ouvrirTiroir('manuel');
+  });
+
+
+  // Exposé pour bidouiller dans la console (F12) :
+  //   LEST.partie.cote = 30
+  //   LEST.partie.horloge.avancer()
+  //   LEST.systeme.distance('estran', 'ressac', 200)
+  //   LEST.carte.choisir('sillage')
+  Object.defineProperty(LEST, 'partie',  { get: function () { return partie; } });
+  Object.defineProperty(LEST, 'systeme', { get: function () { return systeme; } });
+  Object.defineProperty(LEST, 'carte',   { get: function () { return carte; } });
+  // L'écran B est le premier où l'on tient un vaisseau case par case : savoir
+  // laquelle est aux commandes vaut d'être lisible depuis la console.
+  Object.defineProperty(LEST, 'secteur', { get: function () { return vueSecteur; } });
+
+  // 5 septembre : accueil demandé par Vincent ; prologue conservé, non lancé.
+  var accueil = document.getElementById('accueil-edition');
+  var arrierePlan = Array.from(document.body.children).filter(function (e) {
+    return e !== accueil && e.tagName !== 'SCRIPT';
+  });
+  arrierePlan.forEach(function (e) { e.inert = true; });
+  document.getElementById('accueil-reprendre').disabled = document.getElementById('b-charger').disabled;
+  function entrer(reprendre) {
+    arrierePlan.forEach(function (e) { e.inert = false; });
+    if (reprendre) {
+      if (!charger()) {
+        arrierePlan.forEach(function (e) { e.inert = true; });
+        document.getElementById('accueil-erreur').textContent = document.getElementById('etat-sauvegarde').textContent;
+        return;
+      }
+    } else {
+      demarrer();
+      partie.horloge.reglerVitesse(0);
+      rafraichir();
+    }
+    accueil.hidden = true;
+    ambiance.demarrer();
+    document.getElementById(partie.messageEnCours() ? 'msg-fermer' : 'b-mission').focus();
+  }
+  document.getElementById('accueil-nouveau').addEventListener('click', function () { entrer(false); });
+  document.getElementById('accueil-reprendre').addEventListener('click', function () { entrer(true); });
+  document.getElementById('accueil-nouveau').focus();
+
+})();
+</script>
+
+</body>
+</html>
