@@ -37,8 +37,11 @@
           <p id="secteur-choisi">F11 · clairière témoin</p><button id="descendre">Ouvrir la clairière F11</button>
         </div>
         <div class="legende"><span><i class="vert"></i> Pose possible</span><span><i class="rouge"></i> Terrain inaccessible</span><span><i class="ocre"></i> Traces conservées</span>
-          <label><input id="reperes" type="checkbox" checked> Quadrillage et repères</label>
-          <label id="commande-installations" hidden><input id="installations" type="checkbox" checked> Installations et traces</label></div>
+          <div id="commandes-reperes" role="group" aria-label="Affichage des repères">
+            <button id="hud-basculer" type="button" aria-expanded="true" aria-controls="hud-options" aria-label="Masquer les commandes du hublot" title="Masquer les commandes du hublot">−</button><div id="hud-options">
+            <label><input id="reperes" type="checkbox" checked><span>Quadrillage et repères</span><b class="etat-actif">Affichés</b><b class="etat-masque">Masqués</b></label>
+            <label id="commande-installations" hidden><input id="installations" type="checkbox" checked><span>Installations et traces</span><b class="etat-actif">Affichées</b><b class="etat-masque">Masquées</b></label>
+          </div></div></div>
         <p id="message" role="status" aria-live="polite">Chargement des images…</p>
       </section>
       <aside>
