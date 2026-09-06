@@ -46,3 +46,16 @@
 @media(max-width:760px){.cr-ressources{padding:16px}.cr-grille{grid-template-columns:repeat(2,minmax(0,1fr))}.cr-ressource{grid-template-columns:40px minmax(0,1fr);gap:6px}.cr-ressource img{grid-row:1/4;width:40px;height:40px}.cr-stock{font-size:25px}.cr-nom{font-size:13px}.cr-flux{font-size:14px}.cr-complement{font-size:13px;line-height:1.5}#ec-chantier .cv-corps{display:flex;flex-direction:column}#ec-chantier .cv-dessus{order:1}#ec-chantier .cv-droite{border-left:0;border-bottom:1px solid #53635c}#ec-chantier .cv-batir-grille{display:flex;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}#ec-chantier .cv-batir-carte{min-width:160px;max-width:160px;scroll-snap-align:start}#ec-chantier .cv-terrain{grid-template-columns:repeat(2,minmax(0,1fr))}.cv-journal-pliable{margin:0 14px 10px}.cv-modele-catalogue{height:95px}}
 
 .cv-pose-valide:hover .cv-case-nom,.cv-pose-valide:focus-visible .cv-case-nom{opacity:0}
+
+
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-terrain{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(148px,1fr));aspect-ratio:3/2;padding:8% 9%;gap:16px;background:linear-gradient(#0810150d,#08101522),url('assets/decors/ludion-pont-v01/pont-technique.png') center/cover;border:1px solid #626e65;border-radius:8px;box-shadow:0 12px 35px #0005}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-case{background:#0b181c66;border-color:#9daea47a;box-shadow:inset 0 0 16px #08151533}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-case.vide{background:#0b181c1c;border-color:#b4c6ba8c}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-case-numero{color:#c9d5c8;text-shadow:0 2px 3px #000}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-case-nom,#ec-chantier .cv-dessus[data-decor="ludion"] .cv-case-etat{text-shadow:0 1px 3px #000,0 0 6px #000}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-modele-sol{height:110px}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-pose-valide:hover,#ec-chantier .cv-dessus[data-decor="ludion"] .cv-pose-valide:focus-visible{background:#25684d66;border-color:#a0eac1}
+#ec-chantier .cv-dessus[data-decor="ludion"] .cv-pose-refusee:hover,#ec-chantier .cv-dessus[data-decor="ludion"] .cv-pose-refusee:focus-visible{background:#752f2f66;border-color:#e48e80}
+@media(max-width:760px){#ec-chantier .cv-dessus[data-decor="ludion"] .cv-terrain{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(148px,1fr));aspect-ratio:2/3;padding:8% 6%;gap:10px}#ec-chantier .cv-dessus[data-decor="ludion"] .cv-modele-sol{height:95px}}
+
+.cv-catalogue{display:flex;flex-direction:column;gap:12px}.cv-detail{display:flex;flex-direction:column;gap:10px;padding-bottom:18px;border-bottom:1px solid #62736b}.cv-retour-catalogue{align-self:flex-start;min-height:44px;padding:10px 15px;font-size:13px;color:#d0e9df!important;border-color:#6b9385!important}
