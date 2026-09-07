@@ -3,3 +3,7 @@
 .pause-cadre{position:absolute;bottom:14px;right:14px;background:#101719dc;border-color:#82978d;z-index:2}
 
 #bras-etude{margin-top:22px;border:1px solid var(--trait);padding:14px}#bras-etude summary{cursor:pointer;min-height:32px;color:var(--cuivre)}.bras-apercu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin-top:18px}.bras-apercu video{width:100%;background:#393939}.bras-apercu p{color:var(--pale);font-size:14px}@media(max-width:700px){.bras-apercu{grid-template-columns:1fr}}
+
+.mixeur{display:grid;grid-template-columns:minmax(160px,1fr) minmax(130px,1fr);gap:12px;align-items:center}.mixeur label{display:grid;gap:8px}.mixeur input{width:100%}.mixeur button[aria-pressed=true]{background:#456462;border-color:#ade8d5}#mixeur-maitre{margin:20px 0;padding:16px;border:1px solid #475753}
+
+.reference-bras{width:170px;margin:12px 0}.reference-bras div{aspect-ratio:5/6;background-image:url(../../assets/conseiller-maitre.png);background-size:668.8% 313.67%;background-position:65.4% 19.5%}.reference-bras figcaption{font-size:12px;color:#a6b7b2;margin-top:5px}
